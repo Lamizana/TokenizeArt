@@ -1,0 +1,9 @@
+{
+  "name": "TKA42",
+  "description": "Un NFT unique créé dans le cadre du projet TokenizeArt (42 x BNB Chain). L'œuvre représente la réponse... et bien sûr, le 42.",
+  "image": "https://gateway.pinata.cloud/ipfs/bafkreiegpfudye6ovifjlotmpo4nv6qqh4d2luci7agpurbtpo6mkj7734",
+  "attributes": [
+    { "trait_type": "Artiste", "value": "alamizan" },
+    { "trait_type": "Projet", "value": "TokenizeArt" }
+  ]
+}

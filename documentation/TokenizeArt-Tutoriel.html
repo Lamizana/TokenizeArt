@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="fr"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TokenizeArt — Tutoriel pas à pas (NFT)</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --bg-card: #171a24;
+    --bg-hover: #1e2230;
+    --border: #262b3d;
+    --text: #e6e8ef;
+    --text-dim: #9aa0b0;
+    --accent: #f0b90b;
+    --accent-dark: #c99406;
+    --done: #2ecc71;
+    --danger: #e74c3c;
+    --info: #4ea1ff;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    padding: 0 20px 80px;
+  }
+
+  .container { max-width: 860px; margin: 0 auto; }
+
+  header {
+    text-align: center;
+    padding: 36px 24px;
+    margin: 20px 0 8px;
+    background: linear-gradient(135deg, #1a1e2b 0%, #14161f 60%, #1a1a14 100%);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+  }
+
+  header h1 { font-size: 1.8rem; }
+  header h1 span { color: var(--accent); }
+  header p { color: var(--text-dim); margin-top: 8px; }
+  header .level {
+    display: inline-block;
+    margin-top: 12px;
+    font-size: 0.8rem;
+    padding: 4px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+  }
+
+  /* Sommaire */
+  nav.toc {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin: 20px 0;
+    position: sticky;
+    top: 12px;
+    z-index: 10;
+  }
+
+  nav.toc h2 { font-size: 0.95rem; color: var(--accent); margin-bottom: 10px; }
+
+  nav.toc ul { list-style: none; display: flex; flex-wrap: wrap; gap: 6px 10px; }
+
+  nav.toc a {
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 0.85rem;
+    padding: 3px 10px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    transition: all 0.15s;
+  }
+
+  nav.toc a:hover { color: var(--accent); border-color: var(--accent); }
+
+  /* Sections */
+  .section {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px 26px;
+    margin-top: 22px;
+  }
+
+  .section > h2 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.25rem;
+    margin-bottom: 6px;
+  }
+
+  .section > h2 .step-num {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #000;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.95rem;
+  }
+
+  .section > .intro { color: var(--text-dim); margin-bottom: 14px; }
+
+  .section .goal {
+    background: rgba(240, 185, 11, 0.08);
+    border-left: 3px solid var(--accent);
+    padding: 10px 14px;
+    border-radius: 0 8px 8px 0;
+    font-size: 0.9rem;
+    margin-bottom: 16px;
+  }
+
+  .goal b { color: var(--accent); }
+
+  /* Étapes */
+  .step {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-bottom: 14px;
+  }
+
+  .step h3 {
+    font-size: 1rem;
+    margin-bottom: 8px;
+    color: var(--text);
+  }
+
+  .step h3 .k { color: var(--accent); }
+
+  .step p { color: var(--text-dim); margin-bottom: 8px; }
+  .step ul, .step ol { padding-left: 20px; margin-bottom: 8px; color: var(--text-dim); }
+  .step li { margin-bottom: 4px; }
+  .step li b { color: var(--text); }
+
+  code {
+    background: #0b0d13;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-size: 0.88em;
+    color: var(--accent);
+    font-family: 'Cascadia Code', Consolas, monospace;
+  }
+
+  pre {
+    background: #0b0d13;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px;
+    overflow-x: auto;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    margin: 10px 0;
+  }
+
+  pre code { border: none; padding: 0; color: #d8dee9; }
+
+  /* Boîtes */
+  .box {
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin: 12px 0;
+    font-size: 0.9rem;
+  }
+
+  .box.warn { background: rgba(231, 76, 60, 0.08); border-left: 3px solid var(--danger); color: var(--text-dim); }
+  .box.info { background: rgba(78, 161, 255, 0.08); border-left: 3px solid var(--info); color: var(--text-dim); }
+  .box.good { background: rgba(46, 204, 113, 0.08); border-left: 3px solid var(--done); color: var(--text-dim); }
+
+  .box b { color: var(--text); }
+  .box.warn b { color: var(--danger); }
+  .box.info b { color: var(--info); }
+  .box.good b { color: var(--done); }
+
+  /* Tableaux */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 0.9rem;
+  }
+
+  th, td {
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    text-align: left;
+  }
+
+  th { background: var(--bg-hover); color: var(--accent); }
+  td { color: var(--text-dim); }
+  td code { font-size: 0.85em; }
+
+  footer { text-align: center; color: var(--text-dim); font-size: 0.8rem; margin-top: 36px; }
+
+  @media (max-width: 600px) {
+    .section { padding: 18px 14px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <h1>🖼️ Tutoriel : Créer votre premier NFT <span>pas à pas</span></h1>
+    <p>Un guide complet pour débutant — de zéro jusqu'à un NFT unique publié sur la blockchain BNB</p>
+    <span class="level">Niveau : débutant · Durée estimée : 2 à 3 h · 0 € requis</span>
+  </header>
+
+  <nav class="toc">
+    <h2>Sommaire</h2>
+    <ul>
+      <li><a href="#concepts">A. Concepts</a></li>
+      <li><a href="#metamask">B. MetaMask</a></li>
+      <li><a href="#faucet">C. tBNB gratuits</a></li>
+      <li><a href="#image">D. L'image &amp; IPFS</a></li>
+      <li><a href="#metadata">E. Métadonnées</a></li>
+      <li><a href="#contract">F. Le smart contract</a></li>
+      <li><a href="#compile">G. Compiler</a></li>
+      <li><a href="#deploy">H. Déployer</a></li>
+      <li><a href="#mint">I. Miner (mint) le NFT</a></li>
+      <li><a href="#verify">J. BSCScan</a></li>
+      <li><a href="#depot">K. Dépôt conforme</a></li>
+      <li><a href="#faq">L. Dépannage</a></li>
+      <li><a href="#bonus">M. Bonus</a></li>
+    </ul>
+  </nav>
+
+  <!-- ============ A. CONCEPTS ============ -->
+  <section class="section" id="concepts">
+    <h2><span class="step-num">A</span> Comprendre avant de coder</h2>
+    <p class="intro">Pas de panique si certains mots te semblent étranges. Voici l'essentiel en 5 minutes.</p>
+
+    <div class="step">
+      <h3><span class="k">A.1</span> Qu'est-ce qu'un NFT ?</h3>
+      <p>Un <b>NFT</b> (<i>Non-Fungible Token</i>) est un jeton numérique <b>unique</b> créé sur une blockchain. Contrairement à un token classique (où chaque unité est identique et échangeable), chaque NFT est <b>non fongible</b> : il ne peut pas être remplacé par un autre à l'identique. Dans notre projet, il suivra la norme <b>BEP-721</b> (la norme des NFTs sur la BNB Chain), calquée sur l'ERC-721 d'Ethereum.</p>
+      <p>Chaque NFT dispose d'un <b><code>owner</code></b> (propriétaire) et d'une <b><code>tokenURI</code></b> qui pointe vers ses métadonnées (image, nom, description). Grâce au standard, tous les wallets et explorateurs comprennent et affichent ton NFT automatiquement.</p>
+      <div class="box info"><b>Différence clé :</b> un token fongible (BEP-20) est comme des pièces de monnaie ; un NFT (BEP-721) est comme une œuvre d'art signée, avec un numéro d'inventaire unique.</div>
+    </div>
+
+    <div class="step">
+      <h3><span class="k">A.2</span> Blockchain, testnet et le réseau réel</h3>
+      <p>La <b>BNB Chain</b> (réseau du partenaire du projet 42) existe en deux versions :</p>
+      <ul>
+        <li><b>Réseau principal (Mainnet)</b> : le vrai réseau, avec de l'argent réel. <b>On n'y touche pas pour ce projet.</b></li>
+        <li><b>Réseau de test (Testnet)</b> : une copie gratuite pour s'entraîner. Les tokens s'y appellent des <b>tBNB</b> et <b>ne valent rien</b>. C'est ici qu'on va travailler.</li>
+      </ul>
+      <div class="box good"><b>Rassure-toi :</b> ce projet ne demande <u>jamais</u> d'argent réel. Tout se passe sur le testnet.</div>
+    </div>
+
+    <div class="step">
+      <h3><span class="k">A.3</span> Le vocabulaire à connaître</h3>
+      <ul>
+        <li><b>Wallet (portefeuille)</b> : applis comme MetaMask qui détiennent tes adresses et tes fonds.</li>
+        <li><b>Adresse</b> : une longue chaîne (<code>0x...</code>) qui identifie un compte, un peu comme un numéro de compte bancaire.</li>
+        <li><b>Smart contract</b> : un programme qui vit sur la blockchain (ici : la fabrique qui crée tes NFTs).</li>
+        <li><b>IPFS</b> : un système de stockage distribué de fichiers, idéal pour héberger l'image et les métadonnées d'un NFT de façon permanente.</li>
+        <li><b>CID</b> : l'empreinte unique d'un fichier sur IPFS (<code>ipfs://Qm...</code>). Il sert à retrouver l'image n'importe où.</li>
+        <li><b>Métadonnées</b> : le "dossier" du NFT (image, nom, artiste, titre...) stocké en JSON, souvent sur IPFS.</li>
+        <li><b>Gas</b> : la petite redevance en crypto payée pour exécuter une action sur la blockchain.</li>
+        <li><b>Faucet</b> : un site qui distribue gratuitement des jetons de test.</li>
+        <li><b>Block explorer (BSCScan)</b> : un moteur de recherche de la blockchain, où chaque transaction est visible.</li>
+        <li><b>ABI</b> : la "notice d'utilisation" d'un smart contract, décrivant ses fonctions.</li>
+      </ul>
+    </div>
+
+    <div class="box info"><b>Notre objectif :</b> créer un NFT nommé <code>Token42</code>, avec une image stockée sur <b>IPFS</b> (le chiffre <b>42</b> doit y être lisible), le déployer sur la <b>BSC Testnet</b>, le miner, puis le vérifier sur <b>BSCScan</b>.</div>
+  </section>
+
+  <!-- ============ B. METAMASK ============ -->
+  <section class="section" id="metamask">
+    <h2><span class="step-num">B</span> Installer MetaMask et ajouter le réseau de test</h2>
+    <p class="intro">MetaMask est le wallet qu'on utilisera pour signer les transactions et recevoir le NFT.</p>
+
+    <div class="goal"><b>Objectif :</b> un wallet prêt, connecté au réseau BSC Testnet.</div>
+
+    <div class="step">
+      <h3><span class="k">B.1</span> Installer l'extension</h3>
+      <ol>
+        <li>Va sur <code>metamask.io</code> et clique sur <b>"Download"</b>.</li>
+        <li>Installe l'extension sur ton navigateur (Chrome, Firefox, Brave…).</li>
+        <li>Ouvre l'extension et clique sur <b>"Créer un wallet"</b>.</li>
+        <li>Choisis un mot de passe.</li>
+        <li><b>IMPORTANT :</b> note la <b>phrase de récupération (seed phrase)</b> sur papier, jamais en ligne. C'est la clé de ton wallet. Quiconque l'a, contrôle tes fonds.</li>
+      </ol>
+      <div class="box warn"><b>Jamais</b> de donner sa seed phrase à qui que ce soit, ni de la coller dans un site ou dans un code.</div>
+    </div>
+
+    <div class="step">
+      <h3><span class="k">B.2</span> Ajouter le réseau BSC Testnet</h3>
+      <p>Par défaut, MetaMask est sur Ethereum. On ajoute la BNB Smart Chain de test :</p>
+      <ol>
+        <li>Clique sur le menu déroulant en haut à gauche (il affiche "Ethereum Mainnet").</li>
+        <li>Clique sur <b>"Add network"</b> puis <b>"Add a network manually"</b>.</li>
+        <li>Remplis les champs suivants (à recopier exactement) :</li>
+      </ol>
+      <table>
+        <tbody><tr><th>Champ</th><th>Valeur</th></tr>
+        <tr><td>Network name</td><td><code>BSC Testnet</code></td></tr>
+        <tr><td>New RPC URL</td><td><code>https://data-seed-prebsc-1-s1.bnbchain.org:8545</code></td></tr>
+        <tr><td>Chain ID</td><td><code>97</code></td></tr>
+        <tr><td>Currency symbol</td><td><code>tBNB</code></td></tr>
+        <tr><td>Block Explorer URL</td><td><code>https://testnet.bscscan.com</code></td></tr>
+      </tbody></table>
+      <p>Clique sur <b>"Save"</b>. Le réseau doit apparaître dans la liste.</p>
+      <div class="box info"><b>Astuce :</b> le "Chain ID 97" identifie la BSC Testnet. Si tu vois un autre numéro, tu es sur le mauvais réseau.</div>
+    </div>
+
+    <div class="step">
+      <h3><span class="k">B.3</span> Copier ton adresse</h3>
+      <p>Clique sur ton adresse (sous le nom du compte, ça ressemble à <code>0x1234...abcd</code>) pour la copier. Garde-la sous la main : tu t'en serviras partout. Prévois aussi une <b>deuxième adresse</b> (bouton "Add account") pour tester le transfert de propriété plus tard.</p>
+    </div>
+  </section>
+
+  <!-- ============ C. FAUCET ============ -->
+  <section class="section" id="faucet">
+    <h2><span class="step-num">C</span> Récupérer des tBNB gratuits (faucet)</h2>
+    <p class="intro">Pour déployer un contrat et miner, il faut payer le "gas" en tBNB. On les obtient gratuitement.</p>
+
+    <div class="goal"><b>Objectif :</b> avoir quelques tBNB sur ton wallet testnet.</div>
+
+    <div class="step">
+      <h3><span class="k">C.1</span> Utiliser le faucet de BNB Chain</h3>
+      <ol>
+        <li>Va sur le site officiel : <code>https://www.bnbchain.org/</code> puis cherche la section <b>Faucet</b> (ou va directement sur <code>faucet.bnbchain.org</code>).</li>
+        <li>Sélectionne le réseau <b>BSC Testnet</b>.</li>
+        <li>Colle ton adresse MetaMask (celle du B.3).</li>
+        <li>Clique sur le bouton pour recevoir des tBNB (un montant minimum est parfois exigé dans le wallet, mais le faucet officiel n'en demande pas).</li>
+        <li>Attends la confirmation. Vérifie dans MetaMask que ton solde tBNB a augmenté.</li>
+      </ol>
+      <div class="box warn"><b>Si tu n'as rien reçu :</b> attends quelques minutes ou réessaie. Les faucets peuvent être temporairement à sec ou demander un délai entre deux demandes. C'est normal.</div>
+      <div class="box good"><b>Vérif :</b> solde tBNB &gt; 0 dans MetaMask = étape réussie.</div>
+    </div>
+  </section>
+
+  <!-- ============ D. IMAGE + IPFS ============ -->
+  <section class="section" id="image">
+    <h2><span class="step-num">D</span> Créer l'image et la stocker sur IPFS</h2>
+    <p class="intro">Avant le code, on prépare le « visage » de notre NFT : son image. Le sujet impose qu'elle soit stockée via un registre distribué (IPFS par exemple) et que le chiffre <b>42</b> y soit lisible.</p>
+
+    <div class="goal"><b>Objectif :</b> une image originale contenant le 42, disponible sur IPFS (obtention d'un CID).</div>
+
+    <div class="step">
+      <h3><span class="k">D.0</span> Comprendre IPFS et le rôle de Pinata</h3>
+      <p>Avant de manipuler Pinata, il faut saisir <b>pourquoi</b> on ne met pas simplement l'image sur un site web classique. C'est une question que les évaluateurs adorent poser.</p>
+
+      <p><b>Le problème du stockage centralisé.</b> Si ton image vit sur un seul serveur (celui de ton hébergeur, d'un site, d'un réseau social…), tout dépend de ce point unique. Ce serveur peut :</p>
+      <ul>
+        <li><b>tomber en panne</b> → l'image disparaît ;</li>
+        <li><b>fermer</b> ou supprimer le contenu → les liens deviennent "morts" ;</li>
+        <li><b>être censuré</b> ou modifié sans ton accord.</li>
+      </ul>
+      <p>Un NFT est censé durer et prouver durablement une propriété. Le lier à un serveur central fragile est donc contre-productif.</p>
+
+      <p><b>Qu'est-ce qu'IPFS ?</b> IPFS (<i>InterPlanetary File System</i>) est un système de fichiers <b>distribué</b> et <b>pair-à-pair</b>. Contre l'approche centralisée, il introduit deux idées majeures :</p>
+      <ul>
+        <li><b>Adressage par contenu</b> : un fichier n'est pas identifié par son <b>emplacement</b> (comme une URL <code>/images/token.png</code>) mais par son <b>contenu</b>, via un <b>CID</b> (<i>Content Identifier</i>). Un CID est une sorte d'empreinte cryptographique du fichier — le même contenu donne toujours le même CID, partout sur le réseau.</li>
+        <li><b>Déduplication et immutabilité</b> : deux personnes ayant le même fichier partagent le même CID. Et si tu modifies ne fût-ce qu'un pixel, le CID change complètement : un CID pointe donc toujours vers un contenu <b>exactement identique et inchangé</b>.</li>
+      </ul>
+
+      <p><b>Épinglage (pinning)</b> : sur IPFS, un fichier n'est lisible que si au moins un nœud le <b>maintient en ligne</b>. « Épingler » un fichier, c'est s'engager à le garder disponible. Sans épinglage, un contenu peut disparaître si personne ne le conserve.</p>
+      <p><b>Passerelles (gateways)</b> : les navigateurs ne parlent pas IPFS nativement. Les <b>gateways</b> sont des sites web qui traduisent une adresse IPFS en URL web classique, par exemple :</p>
+      <pre><code>https://gateway.pinata.cloud/ipfs/QmXy1...VOTRE_CID...</code></pre>
+
+      <p><b>Pourquoi Pinata ?</b> Pinata est un <b>service d'épinglage</b> (pinning service). Plutôt que de monter et entretenir ton propre nœud IPFS (technique, coûteux, fragile), Pinata héberge et épinglise tes fichiers pour toi, tout en offrant une interface web, des statistiques et une API. C'est l'un des prestataires les plus utilisés dans l'écosystème NFT.</p>
+
+      <div class="box info"><b>Lien avec le sujet :</b> le sujet exige un stockage via « registre distribué (IPFS, par exemple) ». Choisir Pinata pour héberger et épingler nos fichiers sur IPFS est donc un choix justifiable, que tu pourras défendre à l'évaluation.</div>
+
+      <table>
+        <tbody>
+          <tr><th>Critère</th><th>Serveur classique</th><th>IPFS (+ Pinata)</th></tr>
+          <tr><td>Adressage</td><td>Par emplacement (URL)</td><td>Par contenu (CID)</td></tr>
+          <tr><td>Infrastructure</td><td>Centralisée, un point unique</td><td>Distribuée, pair-à-pair</td></tr>
+          <tr><td>Risque de lien mort</td><td>Élevé (panne, fermeture, censure)</td><td>Faible si épinglé</td></tr>
+          <tr><td>Modification</td><td>Possible sur place</td><td>Impossible (CID = contenu figé)</td></tr>
+          <tr><td>Durabilité</td><td>Dépend du serveur unique</td><td>Dépend de l'épinglage (géré par Pinata)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="step">
+      <h3><span class="k">D.1</span> Concevoir l'image</h3>
+      <ul>
+        <li>Choisis la représentation de ton œuvre : dessin, photo, design, texte stylisé… la liberté est totale.</li>
+        <li>Fais en sorte que le chiffre <b>42</b> soit <b>clairement lisible</b> dans l'image (c'est une exigence du sujet et il sera vérifié).</li>
+        <li><b>Interdit :</b> tout terme ou image insultant, sous peine de sanctions.</li>
+        <li>Exporte au format <code>.png</code> ou <code>.jpg</code> (format recommandé pour les NFTs).</li>
+      </ul>
+      <div class="box warn"><b>Ne stocke pas l'image dans ton dépôt Git</b> comme unique copie : le sujet exige une technologie de registre distribué (IPFS). On s'en occupe à l'étape suivante.</div>
+    </div>
+
+    <div class="step">
+      <h3><span class="k">D.2</span> Utiliser Pinata : uploader l'image</h3>
+      <p>Pinata est un service simple pour héberger et <b>épingler</b> des fichiers sur IPFS. L'offre <b>gratuite</b> suffit largement pour ce projet.</p>
+
+      <h3 style="margin-top:12px;">D.2.a — Créer un compte</h3>
+      <ol>
+        <li>Va sur <code>https://www.pinata.cloud</code> et clique sur <b>"Sign Up"</b>.</li>
+        <li>Crée ton compte (e-mail + mot de passe) et confirme-le.</li>
+        <li>Le plan <b>gratuit</b> (free) suffit : il offre un quota de stockage et d'épinglage très large pour quelques fichiers.</li>
+        <li>Une fois connecté, tu arrives sur le <b>tableau de bord</b>. L'onglet <b>"Files"</b> liste tes fichiers épinglés.</li>
+      </ol>
+      <div class="box info"><b>Optionnel : la clé API.</b> Dans "API Keys", tu peux créer une clé (API Key + Secret) pour gérer tes fichiers par programmation. Ce n'est pas nécessaire pour le projet, mais utile si tu automatises via le site de mint (bonus M.2). Garde le secret confidentiel.</div>
+
+      <h3 style="margin-top:12px;">D.2.b — Uploader l'image</h3>
+      <ol>
+        <li>Dans l'onglet <b>"Files"</b>, clique sur <b>"Add Files"</b> puis <b>"File"</b>.</li>
+        <li>Sélectionne ton image (<code>.png</code> ou <code>.jpg</code>) ou dépose-la par glisser-déposer.</li>
+        <li>Clique sur <b>"Upload"</b>.</li>
+        <li>Après quelques secondes, le fichier apparaît dans la liste avec une colonne <b>CID</b> (ça ressemble à <code>QmXy1...</code>). Clique sur l'icône de copie pour le récupérer.</li>
+      </ol>
+
+      <h3 style="margin-top:12px;">D.2.c — Vérifier et comprendre</h3>
+      <ol>
+        <li>Teste ton image à l'adresse <code>https://gateway.pinata.cloud/ipfs/&lt;CID&gt;</code> : elle doit s'afficher dans le navigateur.</li>
+        <li>Comprends que ce CID est <b>unique et figé</b> : il identifie exactement ce contenu. Si tu changes l'image, tu obtiendras un nouveau CID (l'ancien restera intact).</li>
+        <li>Reste <b>épinglé</b> : tant que le fichier est dans ta liste Pinata (Pinned), il reste disponible sur IPFS. Ne le supprime pas du tableau de bord.</li>
+      </ol>
+
+      <div class="box warn"><b>PATIENCE — la propagation IPFS :</b> un fichier tout juste publié peut mettre quelques secondes ou minutes à être visible via toutes les passerelles. Si le lien est vide, attends puis recharge.</div>
+      <div class="box good"><b>Vérif :</b> ton image s'ouvre via le lien IPFS = étape réussie.</div>
+    </div>
+
+    <div class="step">
+      <h3><span class="k">D.3</span> Les alternatives à Pinata</h3>
+      <p>Pinata est un excellent choix, mais il n'est pas le seul. Si tu préfères, ou pour défendre ton choix à l'évaluation, voici les principales alternatives pour stocker l'image et les métadonnées d'un NFT :</p>
+      <table>
+        <tbody>
+          <tr><th>Service / méthode</th><th>Ce que c'est</th><th>Avantages</th><th>Inconvénients</th></tr>
+          <tr>
+            <td><b>Pinata</b> (notre choix)</td>
+            <td>Service d'épinglage IPFS avec interface web et API</td>
+            <td>Simple, gratuit pour débuter, très utilisé dans les NFT</td>
+            <td>Compte requis, quota limité sur le plan gratuit</td>
+          </tr>
+          <tr>
+            <td><b>NFT.Storage</b></td>
+            <td>Service gratuit spécialisé NFT, basé sur IPFS</td>
+            <td>Gratuit (subventionné), pensé pour les NFTs et leur durabilité</td>
+            <td>Interface plus technique, service à confirmer selon les dates</td>
+          </tr>
+          <tr>
+            <td><b>Web3.Storage</b></td>
+            <td>Service d'épinglage IPFS + archives permanentes</td>
+            <td>API simple, gratuit avec quota</td>
+            <td>Interface moins graphique que Pinata</td>
+          </tr>
+          <tr>
+            <td><b>Nœud IPFS personnel</b></td>
+            <td>On installe IPFS chez soi (IPFS Desktop / CLI) et on épinglé soimême</td>
+            <td>Aucun tiers, contrôle total</td>
+            <td>Technique, dépend de ta machine restée allumée</td>
+          </tr>
+          <tr>
+            <td><b>Directement on-chain</b></td>
+            <td>Stockage dans le contrat (voir bonus M.3 : JSON en base64)</td>
+            <td>Le plus durable, pas de service externe</td>
+            <td>Coût de gas élevé, impossible pour une image lourde</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="box info"><b>Autres services d'épinglage :</b> on trouve aussi <b>Filebase</b>, <b>Infura IPFS</b>, ou <b>MagicEden/arweave</b>... La plupart reposent sur le même principe : ils épinglent ton fichier sur IPFS (ou un registre distribué équivalent) et te donnent un <b>CID</b> / identifiant.</div>
+      <div class="box good"><b>Fait ton choix :</b> le sujet impose « un registre distribué (IPFS, par exemple) ». Peu importe le prestataire tant que l'image et les métadonnées sont <b>accessibles de façon durable</b> via un identifiant de contenu. Pinata est recommandé pour sa simplicité, mais tu es libre.</div>
+    </div>
+  </section>
+
+  <!-- ============ E. METADONNEES ============ -->
+  <section class="section" id="metadata">
+    <h2><span class="step-num">E</span> Créer les métadonnées (JSON) du NFT</h2>
+    <p class="intro">Le NFT doit pointer vers un fichier JSON qui décrit ses métadonnées. Le sujet exige : le nom de l'<b>artiste</b> (qui correspond à ton identifiant), le chiffre <b>42</b> et un <b>titre</b>.</p>
+
+    <div class="goal"><b>Objectif :</b> un fichier <code>metadata.json</code> stocké sur IPFS, avec nom + artiste + 42 + image.</div>
+
+    <div class="step">
+      <h3><span class="k">E.1</span> Rédiger le fichier metadata.json</h3>
+      <p>Crée un fichier <code>metadata.json</code> de ce type (adapte les valeurs) :</p>
+      <pre><code>{
+  "name": "Token42 — Méditation au 42e étage",
+  "description": "Un NFT unique créé dans le cadre du projet TokenizeArt (42 x BNB Chain). L'œuvre représente la réponse... et bien sûr, le 42.",
+  "image": "ipfs://QmXy1...VOTRE_CID_IMAGE...",
+  "attributes": [
+    { "trait_type": "Artiste", "value": "alamizan" },
+    { "trait_type": "Projet", "value": "TokenizeArt" }
+  ]
+}</code></pre>
+      <ul>
+        <li><b><code>name</code></b> : le titre du NFT, contenant le chiffre <b>42</b>.</li>
+        <li><b><code>image</code></b> : le CID IPFS de l'image obtenu en D.2 (préfixe <code>ipfs://</code>).</li>
+        <li><b><code>attributes / Artiste</code></b> : ton identifiant (ex. ton login 42). Le sujet veut que le nom de l'artiste corresponde à ton identifiant.</li>
+      </ul>
+      <div class="box warn"><b>Attention :</b> chaque champ doit être écrit en bon JSON (virgules, guillemets). Une erreur de syntaxe et le NFT s'affichera vide.</div>
+    </div>
+
+    <div class="step">
+      <h3><span class="k">E.2</span> Uploader le JSON sur IPFS (Pinata)</h3>
+      <ol>
+        <li>Reviens dans Pinata, onglet <b>"Files"</b> → <b>"Add Files"</b>.</li>
+        <li>Sélectionne <code>metadata.json</code> et upload-le (même procédure qu'en D.2).</li>
+        <li>Récupère son <b>CID</b> (ex. <code>QmAbc...</code>). <b>Attention : il diffère du CID de l'image</b> — c'est normal, ce sont deux contenus distincts.</li>
+        <li>C'est ce CID-là (JSON) qu'on mettra dans le smart contract comme <code>tokenURI</code> de base.</li>
+      </ol>
+      <div class="box warn"><b>Immutabilité du CID :</b> une fois que le JSON est référencé dans le contrat, son CID est figé. Si tu modifies le fichier, tu obtiens un <b>nouveau CID</b> et l'ancien NFT continuera de pointer vers l'ancien contenu. Il faut donc <b>valider soigneusement le JSON avant de l'épingler</b> en référence définitive. Pour un changement, publie un nouveau fichier (nouveau CID) plutôt que de modifier l'ancien.</div>
+      <div class="box good"><b>Vérif :</b> le JSON s'ouvre dans le navigateur via <code>https://gateway.pinata.cloud/ipfs/&lt;CID_JSON&gt;</code> et affiche bien le champ <code>image</code> avec le CID de l'image.</div>
+    </div>
+  </section>
+
+  <!-- ============ F. SMART CONTRACT ============ -->
+  <section class="section" id="contract">
+    <h2><span class="step-num">F</span> Écrire le smart contract du NFT</h2>
+    <p class="intro">On écrit le programme de notre NFT en <b>Solidity</b>. On réutilise la bibliothèque <b>OpenZeppelin</b> qui fournit un ERC-721 éprouvé (pas besoin de tout réinventer, c'est plus sûr).</p>
+
+    <div class="goal"><b>Objectif :</b> un fichier <code>Token42.sol</code> correct, commenté, avec les fonctions <code>mint</code>, <code>ownerOf</code> et une gestion de propriété sécurisée.</div>
+
+    <div class="step">
+      <h3><span class="k">F.1</span> Le code complet du contrat</h3>
+      <p>Ce fichier doit aller dans le dossier <code>code/</code> de ton dépôt sous le nom <code>Token42.sol</code>. Voici un exemple de base (à adapter et à <b>commenter toi-même</b> pour l'évaluation) :</p>
+      <pre><code>// SPDX-License-Identifier: MIT
+// Token42 — NFT non fongible (standard BEP-721 / ERC-721) sur la BNB Chain
+pragma solidity ^0.8.0;
+
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/utils/Counters.sol";
+
+contract Token42 is ERC721URIStorage {
+    using Counters for Counters.Counter;
+    Counters.Counter private _tokenIds;
+
+    address public owner;
+    string public baseURI;
+
+    // Chaque NFT possède un numéro unique (tokenId)
+    // et une URI pointant vers ses métadonnées (IPFS)
+
+    constructor(string memory _baseURI) ERC721("Token42", "T42") {
+        owner = msg.sender;   // Le déployeur devient propriétaire de la collection
+        baseURI = _baseURI;
+    }
+
+    // Créer (miner) un nouveau NFT pour `recipient`
+    function mintNFT(address recipient) public returns (uint256) {
+        require(msg.sender == owner, "Token42: only owner can mint");
+        _tokenIds.increment();
+        uint256 newTokenId = _tokenIds.current();
+        _mint(recipient, newTokenId);
+        _setTokenURI(newTokenId, baseURI);  // pointe vers metadata.json sur IPFS
+        return newTokenId;
+    }
+
+    // Récupérer le propriétaire d'un NFT donné (exigé par le sujet)
+    function ownerOf(uint256 tokenId) public view override returns (address) {
+        return super.ownerOf(tokenId);
+    }
+
+    // Transférer la propriété de la collection
+    function transferOwnership(address newOwner) public {
+        require(msg.sender == owner, "Token42: only owner");
+        owner = newOwner;
+    }
+}
+</code></pre>
+      <div class="box warn"><b>À toi de jouer :</b> ce code est une base. Commente chaque fonction avec tes propres mots — une <b>revue de code</b> aura lieu à l'évaluation. Vérifie notamment que <code>ownerOf</code> est bien présent (exigence du sujet).</div>
+    </div>
+
+    <div class="step">
+      <h3><span class="k">F.2</span> Expliquer les mots du code</h3>
+      <ul>
+        <li><code>contract Token42 is ERC721URIStorage</code> → on hérite du standard NFT d'OpenZeppelin + du support des URI stockées.</li>
+        <li><code>_tokenIds</code> → un compteur qui attribue un numéro unique à chaque NFT (1, 2, 3…).</li>
+        <li><code>mintNFT</code> → crée réellement le NFT et lui associe ses métadonnées (l'URI IPFS).</li>
+        <li><code>ownerOf</code> → répond « qui possède ce NFT ? » (fonction exigée par le sujet).</li>
+        <li><code>require(...)</code> → vérifie une condition, sinon annule la transaction. Ici : seul le propriétaire peut miner.</li>
+      </ul>
+      <div class="box info"><b>Pourquoi un seul owner ?</b> Le sujet parle de sécurité (propriété / privilèges). On restreint le <code>mint</code> au propriétaire pour contrôler qui crée les NFTs. C'est un choix sûr et simple à défendre à l'oral.</div>
+    </div>
+  </section>
+
+  <!-- ============ G. COMPILER ============ -->
+  <section class="section" id="compile">
+    <h2><span class="step-num">G</span> Compiler avec Remix</h2>
+    <p class="intro"><b>Remix IDE</b> est l'outil recommandé par le sujet : un environnement gratuit dans le navigateur pour écrire, compiler et déployer des smart contracts.</p>
+
+    <div class="goal"><b>Objectif :</b> ton code compile sans erreur.</div>
+
+    <div class="step">
+      <h3><span class="k">G.1</span> Ouvrir Remix et créer le fichier</h3>
+      <ol>
+        <li>Va sur <code>https://remix.ethereum.org</code>.</li>
+        <li>Dans le panneau de gauche (explorateur de fichiers), crée un dossier <b>contracts</b> s'il n'existe pas, puis un fichier <code>Token42.sol</code> (icône "nouveau fichier").</li>
+        <li>Colle le code du contrat dedans et enregistre (<code>Ctrl+S</code>).</li>
+      </ol>
+    </div>
+
+    <div class="step">
+      <h3><span class="k">G.2</span> Installer OpenZeppelin (import)</h3>
+      <p>Le code importe <code>@openzeppelin/contracts/...</code>. Remix doit le télécharger :</p>
+      <ol>
+        <li>Ouvre l'onglet <b>"Solidity Compiler"</b> (icône en forme de "S").</li>
+        <li>Clique sur <b>"Compile Token42.sol"</b>. Remix détectera l'import manquant et proposera de l'installer — accepte.</li>
+        <li>Sinon, va dans l'onglet <b>"File explorer"</b> → clic droit sur le dossier racine → <b>"Import from GitHub"</b> et colle : <code>OpenZeppelin/openzeppelin-contracts@master/contracts/token/ERC721/ERC721.sol</code>. Remix récupérera toute la bibliothèque.</li>
+      </ol>
+    </div>
+
+    <div class="step">
+      <h3><span class="k">G.3</span> Choisir la version et compiler</h3>
+      <ol>
+        <li>Dans "Solidity Compiler", choisis la version <b>0.8.x</b> (ex. 0.8.26) — elle doit correspondre à <code>pragma solidity ^0.8.0</code>.</li>
+        <li>Clique sur <b>"Compile Token42.sol"</b>.</li>
+        <li>La barre verte <b>"Compilation successful"</b> doit s'afficher.</li>
+      </ol>
+      <div class="box warn"><b>Erreurs fréquentes :</b></div>
+      <ul>
+        <li><code>Source file requires different compiler version</code> → change la version sélectionnée en 0.8.x.</li>
+        <li><code>SPDX license identifier not provided</code> → la ligne <code>// SPDX-License-Identifier: MIT</code> est absente, ajoute-la.</li>
+        <li><code>Different argument count / Unknown function</code> → vérifie que tu es bien sur ERC-721 (pas ERC-20) et que <code>_setTokenURI</code> existe (via <code>ERC721URIStorage</code>).</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ H. DEPLOYER ============ -->
+  <section class="section" id="deploy">
+    <h2><span class="step-num">H</span> Déployer sur la BSC Testnet</h2>
+    <p class="intro">Maintenant qu'on compile, on déploie réellement le contrat du NFT sur le testnet via MetaMask.</p>
+
+    <div class="goal"><b>Objectif :</b> une adresse de contrat <code>0x...</code> sur le testnet + des tBNB dépensés (en test, ça ne coûte rien de réel).</div>
+
+    <div class="step">
+      <h3><span class="k">H.1</span> Connecter Remix à MetaMask</h3>
+      <ol>
+        <li>Dans Remix, ouvre l'onglet <b>"Deploy &amp; Run Transactions"</b>.</li>
+        <li>Dans le menu <b>Environment</b>, choisis <b>"Injected Provider - MetaMask"</b>.</li>
+        <li>Une fenêtre MetaMask s'ouvre : choisis ton compte et clique <b>"Connect"</b>.</li>
+        <li>Vérifie que le réseau affiché dans MetaMask est bien <b>BSC Testnet</b> (chain ID 97).</li>
+      </ol>
+      <div class="box warn"><b>Si rien ne se connecte :</b> assure-toi que l'extension MetaMask est déverrouillée et que tu es sur le bon réseau. Relance Remix au besoin.</div>
+    </div>
+
+    <div class="step">
+      <h3><span class="k">H.2</span> Fournir le baseURI et lancer le déploiement</h3>
+      <ol>
+        <li>Le constructeur du contrat demande un <b><code>_baseURI</code></b>. Renseigne le CID JSON obtenu en E.2 avec le préfixe <code>ipfs://</code> : par ex. <code>ipfs://QmAbc...</code>.</li>
+        <li>Dans le panneau "Deploy &amp; Run", le contrat <b>Token42</b> doit être sélectionné (en haut).</li>
+        <li>Clique sur <b>"Deploy"</b>.</li>
+        <li>Une fenêtre MetaMask apparaît : vérifie le "gas" estimé et clique <b>"Confirmer"</b>.</li>
+        <li>Attends que la transaction soit incluse dans un bloc (généralement quelques secondes).</li>
+      </ol>
+    </div>
+
+    <div class="step">
+      <h3><span class="k">H.3</span> Récupérer l'adresse du contrat</h3>
+      <ol>
+        <li>Sous la section "Deployed Contracts" de Remix, tu verras ton contrat déployé avec son adresse <code>0x...</code>.</li>
+        <li><b>Clique sur la copie</b> de l'adresse (icône) et sauvegarde-la quelque part. On en a besoin pour BSCScan et pour le README.</li>
+        <li>Note aussi le réseau : <b>BSC Testnet</b>.</li>
+      </ol>
+      <div class="box good"><b>Réussi !</b> Ta collection de NFTs existe désormais sur la blockchain de test.</div>
+    </div>
+  </section>
+
+  <!-- ============ I. MINER ============ -->
+  <section class="section" id="mint">
+    <h2><span class="step-num">I</span> Miner (mint) ton NFT</h2>
+    <p class="intro">Le contrat est déployé, mais aucun NFT n'existe encore : il faut le « miner », c'est-à-dire appeler la fonction <code>mintNFT</code>.</p>
+
+    <div class="goal"><b>Objectif :</b> au moins un NFT miné, avec son propriétaire identifiable via <code>ownerOf</code>.</div>
+
+    <div class="step">
+      <h3><span class="k">I.1</span> Appeler mintNFT</h3>
+      <ol>
+        <li>Toujours dans Remix, section "Deployed Contracts" → ton contrat <b>Token42</b> déployé.</li>
+        <li>Déplie la liste des fonctions et trouve <code>mintNFT</code>.</li>
+        <li>Renseigne l'<b>adresse du destinataire</b> (choisis ton adresse MetaMask pour être le premier propriétaire).</li>
+        <li>Clique sur le bouton <b><code>transact</code></b>, confirme dans MetaMask.</li>
+        <li>La fonction retourne un <b>tokenId</b> (généralement <code>0</code> ou <code>1</code>) : c'est le numéro unique de ton NFT.</li>
+      </ol>
+      <div class="box good"><b>Vérif :</b> le NFT existe désormais ! Son image et ses métadonnées sont lisibles via l'URI IPFS.</div>
+    </div>
+
+    <div class="step">
+      <h3><span class="k">I.2</span> Tester ownerOf (propriété)</h3>
+      <ol>
+        <li>Toujours dans Remix, trouve la fonction <code>ownerOf</code>.</li>
+        <li>Renseigne le <code>tokenId</code> obtenu à l'étape précédente.</li>
+        <li>Clique sur le bouton <b><code>call</code></b>.</li>
+        <li>Tu dois voir ton adresse MetaMask s'afficher : <b>c'est le propriétaire du NFT</b> — exactement ce que réclame le sujet.</li>
+      </ol>
+    </div>
+
+    <div class="step">
+      <h3><span class="k">I.3</span> Démonstration de sécurité</h3>
+      <ol>
+        <li>Bascule sur ta <b>deuxième adresse</b> dans MetaMask (B.3).</li>
+        <li>Appelle <code>mintNFT</code> depuis ce compte non-propriétaire.</li>
+        <li>La transaction doit <b>échouer</b> avec le message <code>Token42: only owner can mint</code>.</li>
+      </ol>
+      <div class="box good"><b>À l'évaluation :</b> montre ces appels dans Remix ou sur BSCScan — les transactions y sont visibles et vérifiables.</div>
+    </div>
+  </section>
+
+  <!-- ============ J. BSCSCAN ============ -->
+  <section class="section" id="verify">
+    <h2><span class="step-num">J</span> Vérifier et publier sur BSCScan</h2>
+    <p class="intro">Un block explorer est le "Google de la blockchain". On y rend notre contrat public et vérifiable.</p>
+
+    <div class="goal"><b>Objectif :</b> le contrat "Vérifié" sur BSCScan, avec la collection et les NFT affichés.</div>
+
+    <div class="step">
+      <h3><span class="k">J.1</span> Trouver le contrat</h3>
+      <ol>
+        <li>Va sur <code>https://testnet.bscscan.com</code> (le <b>testnet</b>, pas le mainnet !).</li>
+        <li>Colle l'adresse du contrat dans la barre de recherche.</li>
+        <li>La page du contrat s'affiche avec les transactions de mint. La collection y apparaît encore comme "Unknown" tant que ce n'est pas vérifié.</li>
+      </ol>
+    </div>
+
+    <div class="step">
+      <h3><span class="k">J.2</span> Vérifier le code source</h3>
+      <ol>
+        <li>Ouvre l'onglet <b>"Contract"</b> puis clique <b>"Verify and Publish"</b>.</li>
+        <li>Remplis le formulaire <b>exactement</b> comme à la compilation :
+          <ul>
+            <li>Compiler type : <code>Solidity (Single file)</code></li>
+            <li>Compiler version : celle choisie dans Remix (ex. 0.8.26)</li>
+            <li>Open Source License Type : <code>MIT License</code></li>
+          </ul>
+        </li>
+        <li>Colle le code complet de <code>Token42.sol</code> dans le champ "Solidity Contract Code".</li>
+        <li>Clique <b>"Verify and Publish"</b>.</li>
+      </ol>
+      <div class="box warn"><b>Si la vérification échoue :</b> c'est presque toujours un paramètre différent de la compilation (version Solidity, licence, ou le code pas exactement identique). Recopie ton code depuis Remix tel quel.</div>
+    </div>
+
+    <div class="step">
+      <h3><span class="k">J.3</span> Voir ton NFT</h3>
+      <ol>
+        <li>Sur la page du contrat vérifié, cherche l'onglet <b>"NFT Transfers"</b> ou <b>"Tokens"</b>.</li>
+        <li>Tu y verras le <code>tokenId</code> miné avec son propriétaire et ses métadonnées.</li>
+        <li>Le lien IPFS de l'image doit être visible — ton NFT est désormais associé à son œuvre.</li>
+      </ol>
+      <div class="box good"><b>Résultat :</b> ton NFT est vérifié, visible et son propriétaire est identifiable. C'est la preuve attendue.</div>
+    </div>
+  </section>
+
+  <!-- ============ K. DEPOT CONFORME ============ -->
+  <section class="section" id="depot">
+    <h2><span class="step-num">K</span> Rendre le dépôt Git conforme</h2>
+    <p class="intro">Le sujet demande une structure précise : <code>README.md</code>, <code>code/</code>, <code>deployment/</code>, <code>mint/</code> et <code>documentation/</code> à la racine.</p>
+
+    <div class="goal"><b>Objectif :</b> un dépôt complet, avec l'adresse du contrat et le réseau indiqués.</div>
+
+    <div class="step">
+      <h3><span class="k">K.1</span> Organiser les dossiers demandés</h3>
+      <ul>
+        <li><b><code>code/</code></b> : ton smart contract <code>Token42.sol</code> (le code utilisé pour créer le NFT).</li>
+        <li><b><code>deployment/</code></b> : tout ce qui sert au déploiement — l'<b>ABI</b> (dans Remix, onglet "Solidity Compiler" → bouton <b>"ABI"</b> → exporte le JSON), l'adresse du contrat, le réseau.</li>
+        <li><b><code>mint/</code></b> : les fichiers/instructions pour miner le NFT (script d'appel ou note expliquant la fonction <code>mintNFT</code>).</li>
+        <li><b><code>documentation/</code></b> : le sujet, un whitelivre/manuel et tes notes.</li>
+      </ul>
+    </div>
+
+    <div class="step">
+      <h3><span class="k">K.2</span> Rédiger le <code>deployment/README.md</code></h3>
+      <p>Il doit contenir, pour relier le code à la blockchain :</p>
+      <ul>
+        <li>l'<b>adresse du contrat</b> <code>0x...</code>,</li>
+        <li>le <b>réseau</b> : BSC Testnet (chain ID 97),</li>
+        <li>la version de Solidity et le lien BSCScan du contrat,</li>
+        <li>le CID IPFS de l'image et des métadonnées.</li>
+      </ul>
+    </div>
+
+    <div class="step">
+      <h3><span class="k">K.3</span> Rédiger le <code>README.md</code> racine</h3>
+      <p>Le sujet exige d'expliquer les choix faits. Structure suggérée :</p>
+      <ul>
+        <li>Présentation du projet et du NFT (<code>Token42</code> / <code>T42</code>).</li>
+        <li>Choix de la plateforme : BNB Chain (BEP-721) + pourquoi (partenaire du sujet, faible coût, faucet gratuit).</li>
+        <li>Choix de l'outil : Remix (simple, recommandé par le sujet).</li>
+        <li>Choix techniques : OpenZeppelin ERC-721, image et métadonnées sur IPFS, sécurité via <code>onlyOwner</code>.</li>
+        <li>Adresse du contrat et réseau + lien BSCScan.</li>
+        <li>Comment tester : la liste des actions minimales (mint, ownerOf).</li>
+      </ul>
+    </div>
+
+    <div class="step">
+      <h3><span class="k">K.4</span> Finaliser la documentation</h3>
+      <ul>
+        <li>Rédige un <b>whitelivre</b> décrivant ce que représente ton NFT et comment il fonctionne.</li>
+        <li>Assure-toi qu'il est possible de comprendre le fonctionnement et les prérequis pour utiliser ton NFT (fonction <code>ownerOf</code>, lecture des métadonnées).</li>
+        <li>Optionnel mais valorisé : une <b>vidéo de démo</b> (un simple lien suffit — la vidéo n'apporte pas de meilleure note, elle est facultative).</li>
+      </ul>
+    </div>
+
+    <div class="step">
+      <h3><span class="k">K.5</span> Valider et pousser</h3>
+      <ol>
+        <li>Relis ton contrat : noms explicites, commentaires présents (revue de code à l'évaluation).</li>
+        <li>Vérifie que le chiffre <b>42</b> est lisible sur l'image ET dans le nom, et qu'il n'y a rien d'insultant.</li>
+        <li>Commits et push sur ton dépôt Git.</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============ L. FAQ ============ -->
+  <section class="section" id="faq">
+    <h2><span class="step-num">L</span> Dépannage &amp; questions fréquentes</h2>
+    <p class="intro">Les erreurs les plus courantes et leurs solutions.</p>
+
+    <div class="step">
+      <h3><span class="k">L.1</span> "Not enough funds for gas"</h3>
+      <p>Tu n'as pas assez de tBNB sur ton wallet testnet.</p>
+      <p>→ Récupère des tBNB au faucet (partie C) ou vérifie que MetaMask est bien sur le <b>BSC Testnet</b> (chain ID 97), pas sur Ethereum Mainnet.</p>
+    </div>
+
+    <div class="step">
+      <h3><span class="k">L.2</span> La transaction reste "pending"</h3>
+      <p>Le réseau de test est parfois lent ou le nonce de gas est bloqué.</p>
+      <p>→ Attends, ou dans MetaMask va dans Paramètres → Avancé → <b>"Clear activity tab data"</b> pour réinitialiser. Puis réessaie.</p>
+    </div>
+
+    <div class="step">
+      <h3><span class="k">L.3</span> Mon image / mon JSON ne s'affiche pas</h3>
+      <p>→ Vérifie le CID IPFS : le préfixe <code>ipfs://</code> est-il bien présent dans le <code>baseURI</code> du contrat ? Le fichier est-il encore "épinglé" sur Pinata ? Teste le lien via la passerelle IPFS.</p>
+    </div>
+
+    <div class="step">
+      <h3><span class="k">L.4</span> La vérification BSCScan échoue</h3>
+      <p>→ Compare paramètre par paramètre avec Remix : version Solidity identique, licence MIT, et colle le code <b>exact</b> de <code>Token42.sol</code> (mêmes espaces, mêmes commentaires, c'est un hash qui doit matcher).</p>
+    </div>
+
+    <div class="step">
+      <h3><span class="k">L.5</span> "revert" quand j'appelle mintNFT depuis un autre compte</h3>
+      <p>Normal ! <code>mintNFT</code> est protégé par la vérification du propriétaire. C'est le comportement attendu et c'est exactement ce qu'il faut montrer à l'évaluation.</p>
+    </div>
+
+    <div class="step">
+      <h3><span class="k">L.6</span> Est-ce que je risque de perdre de l'argent ?</h3>
+      <p>Non. On ne travaille que sur la BSC Testnet avec des tBNB de test qui ne valent rien. N'utilise <b>jamais</b> le Mainnet ni des fonds réels.</p>
+    </div>
+  </section>
+
+  <!-- ============ M. BONUS ============ -->
+  <section class="section" id="bonus">
+    <h2><span class="step-num">M</span> Bonus — aller plus loin</h2>
+    <p class="intro">Le sujet propose trois bonus facultatifs. Ils ne sont utiles que si la partie obligatoire est parfaite.</p>
+
+    <div class="box warn"><b>Important :</b> la partie bonus ne sera évaluée que si la partie obligatoire est <b>PARFAITE</b> (réalisée en intégralité et sans dysfonctionnement). Si une exigence obligatoire n'est pas satisfaite, le bonus ne sera pas évalué du tout. Commence donc toujours par valider les étapes A → L.</div>
+
+    <div class="step">
+      <h3><span class="k">M.1</span> Créer un superbe NFT</h3>
+      <p>Le visuel fait partie de l'évaluation qualitative du bonus. Quelques pistes pour soigner ton œuvre :</p>
+      <ul>
+        <li><b>Pense collection</b> : produis plusieurs variations cohérentes (même thème, mêmes couleurs) plutôt qu'un seul visuel ressemblant à un brouillon.</li>
+        <li><b>Réutilise le chiffre 42</b> comme fil conducteur artistique (reflet, ombre, motif, numéro d'édition…).</li>
+        <li><b>Soigne les métadonnées</b> : descriptions travaillées, plusieurs attributs (cas M.2 et M.3 les consomment).</li>
+        <li><b>Choisis une résolution propre</b> et un format classique (<code>.png</code>/<code>.jpg</code>).</li>
+      </ul>
+      <div class="box info"><b>Rappel</b> : le chiffre <b>42</b> doit rester lisible et aucun contenu insultant n'est toléré.</div>
+    </div>
+
+    <div class="step">
+      <h3><span class="k">M.2</span> Un site web pour miner son NFT</h3>
+      <p>L'objectif est une <b>interface graphique</b> dans <code>mint/</code> qui appelle ton smart contract via un bouton, sans passer par Remix.</p>
+      <ol>
+        <li>Récupère l'<b>ABI</b> du contrat (Remix → "Solidity Compiler" → bouton <b>"ABI"</b> → copie le JSON).</li>
+        <li>Dans <code>mint/</code>, crée <code>index.html</code> qui charge <code>ethers.js</code> depuis un CDN et un bouton <b>"Mint"</b>.</li>
+        <li>Dans <code>mint/app.js</code>, connecte MetaMask, instancie le contrat avec son adresse + l'ABI, puis appel <code>mintNFT(adresse)</code>.</li>
+        <li>Affiche le <code>tokenId</code> retourné et le lien BSCScan de la transaction.</li>
+      </ol>
+      <p>Extrait du cœur de <code>app.js</code> (à compléter et commenter) :</p>
+      <pre><code>// Connexion MetaMask
+const [account] = await provider.send("eth_requestAccounts", []);
+const signer = provider.getSigner();
+
+// Adresse de ton contrat déployé (H.3) + ABI copiée depuis Remix
+const nft = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+
+async function mint() {
+  const tx = await nft.mintNFT(account);   // seul le propriétaire peut mint
+  await tx.wait();
+  console.log("NFT miné ! tokenId :", tx.hash);
+}</code></pre>
+      <div class="box warn"><b>Sécurité :</b> le bouton de mint fonctionne uniquement depuis le compte <b>propriétaire</b> (le <code>require</code> du contrat). D'autres visiteurs pourront <b>voir</b> la collection, mais pas miner.</div>
+    </div>
+
+    <div class="step">
+      <h3><span class="k">M.3</span> Enregistrer métadonnées et image sur la blockchain</h3>
+      <p>Le bonus demande de stocker les métadonnées (et idéalement l'image) <b>directement sur la chaîne</b>, pas seulement sur IPFS. Approche recommandée : <b>JSON encodé en base64</b> comme <code>tokenURI</code>.</p>
+      <ol>
+        <li>Encode <code>metadata.json</code> en base64 (ex. via un site/outil <code>base64</code> en ligne).</li>
+        <li>Préfixe le résultat avec <code>data:application/json;base64,</code>.</li>
+        <li>Dans le contrat, ajoute une fonction permettant de mettre à jour le URI d'un token passé :
+          <pre><code>function setTokenURI(uint256 tokenId, string memory uri) public {
+    require(msg.sender == owner, "Token42: only owner");
+    _setTokenURI(tokenId, uri);
+}</code></pre>
+        </li>
+        <li>Appelle <code>setTokenURI</code> (depuis Remix ou ton site de mint M.2) avec le JSON base64 → les métadonnées sont désormais <b>en chaîne</b>.</li>
+        <li>Dans BSCScan (partie J), l'onglet "Read Contract → tokenURI" doit renvoyer ton <code>data:...</code> et le NFT s'affiche sans dépendre d'IPFS pour le texte.</li>
+      </ol>
+      <div class="box info"><b>L'image reste sur IPFS</b> : encodée en base64 on-chain, une image est trop lourde et coûterait un gas énorme. Le compromis standard : les <b>métadonnées texte (JSON)</b> sont sur la blockchain, le champ <code>image</code> du JSON référence le fichier sur IPFS. C'est ce qui se pratique dans la majorité des collections.</div>
+      <div class="box good"><b>M.2 + M.3 combinés :</b> ton site de mint peut proposer un second bouton "Appliquer métadonnées" qui appelle <code>setTokenURI</code>. Un seul fichier <code>app.js</code> pour tout gérer.</div>
+    </div>
+  </section>
+
+  <footer>TokenizeArt — Tutoriel pas à pas (NFT) · Construit à partir de <b>sujet.md</b> · Bonne chance, et bienvenue dans le Web3 ! 🚀</footer>
+
+</div>
+
+</body></html>
