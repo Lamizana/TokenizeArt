@@ -2,8 +2,6 @@
 
 *Explorateur de blocs officiel de la BNB Smart Chain, permettant de suivre l'état d'avancement de ses transactions et d'inspecter les smart contracts.*
 
-> Date de création : 21.08.2026
-
 ---
 
 ## Qu'est-ce que BscScan ?
@@ -50,7 +48,7 @@ Sur la page d'un contrat, l'onglet **« Contract »** permet de :
 
 ### Vérifier un contrat (Verify & Publish)
 
-L'onglet **« Verify & Publish »** permet de publier le code source d'un smart contract. 
+L'onglet **« Verify & Publish »** permet de publier le code source d'un smart contract.
 
 BscScan le compile et compare le bytecode obtenu avec celui réellement déployé on-chain : si les deux correspondent, le contrat affiche une coche verte ✅ et son code devient consultable par tous.
 C'est un **gage de transparence essentiel** : n'importe qui peut vérifier ce que fait le contrat avant d'interagir avec lui.

@@ -1,12 +1,4 @@
 <div align="center">
-    <h1>TokenizeArt</h1>
-    <img src="./images/logo_nft.jpeg" alt="Icone NFT Glass" width="180" style="border-radius: 16px;">
-    <p>
-        <em>Création d'un premier NFT non fongible dans le cadre du projet <strong>TokenizeArt</strong>.</em>
-    </p>
-</div>
-
-<div align="center">
     <img src="https://img.shields.io/badge/Solidity-363636?style=for-the-badge&logo=solidity&logoColor=white" alt="Solidity">
     <img src="https://img.shields.io/badge/BEP--721-F0B90B?style=for-the-badge&logo=binance&logoColor=black" alt="BEP-721">
     <img src="https://img.shields.io/badge/BNB_Smart_Chain_Testnet-F0B90B?style=for-the-badge&logo=binance&logoColor=black" alt="BNB Smart Chain Testnet">
@@ -14,6 +6,16 @@
     <img src="https://img.shields.io/badge/IPFS-65C2CB?style=for-the-badge&logo=ipfs&logoColor=white" alt="IPFS">
     <img src="https://img.shields.io/badge/Pinata-6C5CE7?style=for-the-badge&logoColor=white" alt="Pinata">
     <img src="https://img.shields.io/badge/MetaMask-F6851B?style=for-the-badge&logo=metamask&logoColor=white" alt="MetaMask">
+</div>
+<div align="center">
+    <h1>TokenizeArt</h1>
+    <img src="./images/Zehd42.png" alt="NFT Zehd42" width="360" style="border-radius: 16px;">
+    <p>
+        <strong>NFT ERC-721 créé sur la BNB Smart Chain</strong>
+    </p>
+    <p>
+    <em>Projet « TokenizeArt » (42 × BNB Chain)</em>
+</p>
 </div>
 
 ---
@@ -28,6 +30,10 @@ L'objectif : concevoir de A à Z un **jeton non fongible (NFT)** conforme au sta
 - **Déployé sur la BNB Smart Chain Testnet** (chainId `97`)
 - **Métadonnées et image stockées sur IPFS** (épinglées via Pinata)
 
+---
+
+## Spécifications du Token
+
 | | |
 | --- | --- |
 | **Nom** | Zehd42 |
@@ -39,16 +45,7 @@ L'objectif : concevoir de A à Z un **jeton non fongible (NFT)** conforme au sta
 | **Plateforme** | REMIX IDE |
 | **Mint** | Réservé au propriétaire (`onlyOwner`) |
 
----
-
-## Résultats
-
-<div align="center">
-    <img src="./images/Zehd42.png" alt="NFT Zehd42" width="360" style="border-radius: 16px;">
-    <p>
-        <em>Création de mon NFT <strong>Zehd42</strong>.</em>
-    </p>
-</div>
+- [***Livre blanc***](documentation/ZEHD42.md) : *Contient toutes les informations relatives au NFT*.
 
 ---
 
@@ -152,10 +149,24 @@ Le vocabulaire à connaître :
 
 ## Documentation
 
-- ***Livre blanc*** : [`documentation/ZEHD42.md`](documentation/ZEHD42.md)
 - ***Sujet officiel*** : [`documentation/SUJET.md`](documentation/SUJET.md)
 - ***Rappels blockchain*** : [`documentation/BLOCKCHAIN.md`](documentation/BLOCKCHAIN.md)
 - ***Les NFT et la norme ERC-721*** : [`documentation/NFT.md`](documentation/NFT.md)
 - ***Stockage distribué*** : [`documentation/IPFS.md`](documentation/IPFS.md)
 - ***Epinglage IPFS*** : [`documentation/PINATA.md`](documentation/PINATA.md)
 - ***Explorateur BscScan*** : [`documentation/BSCSCAN.md`](documentation/BSCSCAN.md)
+
+---
+
+## Auteur
+
+**Alex Lamizana** : Étudiant 42 Angoulême, spécialisation Data & IA
+
+- [Site](https://lamizana.github.io/ZehdBox/)
+- [GitHub](https://github.com/Lamizana/TokenizeArt)
+
+<div align="center">
+
+*Ce projet a été réalisé conformément à la norme et au sujet officiel de 42.*
+
+</div>

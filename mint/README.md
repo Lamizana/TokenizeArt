@@ -11,7 +11,7 @@
 
 - Adresse : `0x3fcCab7bb70aa5BCA5706B83e6Fcf08F80526ce9`
 - Réseau : **BNB Smart Chain Testnet** (chainId `97`)
-- Jeton sur l'explorateur : <https://testnet.bscscan.com/token/0x3fcCab7bb70aa5BCA5706B83e6Fcf08F80526ce9?a=1>
+- Jeton sur l'explorateur : [Testnet](https://testnet.bscscan.com/token/0x3fcCab7bb70aa5BCA5706B83e6Fcf08F80526ce9?a=1)
 
 ---
 
