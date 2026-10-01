@@ -2,8 +2,6 @@
 
 > Ce projet permet d'apprendre les bases du web3. Nous allons créer notre propre jeton non fongible !
 
-> Fait le 31/08/2026
-
 ---
 
 ## Préambule
@@ -18,7 +16,7 @@ Ce projet est le fruit d'un partenariat entre 42 et [BNB Chain](https://www.bnbc
 
 > **Build N Build** (BNB) Chain est un réseau blockchain distribué sur lequel les développeurs et les innovateurs peuvent créer des applications décentralisées (DApps) dans le cadre de la transition vers le Web3.
 
-En octobre 2022, la BNB Chain est la ***plus grande blockchain de contrats intelligents au monde*** en termes de volume de transactions et d’utilisateurs actifs quotidiens. Au moment de la rédaction de cet article, *elle a traité 3 milliards de transactions provenant de 232 millions d’adresses uniques*, et dispose d’un écosystème comptant plus de **1 500 DApps** actives. La nature décentralisée du réseau signifie que n’importe qui peut développer un produit sur la BNB Chain sans avoir à demander d’autorisation, et potentiellement toucher un public très large.
+En octobre 2022, la BNB Chain est la ***plus grande blockchain de contrats intelligents au monde*** en termes de volume de transactions et d’utilisateurs actifs quotidiens. Au moment de la rédaction de cet article, *elle a traité 3 milliards de transactions provenant de 232 millions d’adresses uniques*, et dispose d’un écosystème comptant plus de **1 500 DApps** (Applications décentralisées) actives. La nature décentralisée du réseau signifie que n’importe qui peut développer un produit sur la BNB Chain sans avoir à demander d’autorisation, et potentiellement toucher un public très large.
 
 Vous pouvez obtenir gratuitement des Tbnb, sans montant minimum requis dans votre portefeuille, via cefaucet : [BNB Chain Faucet](https://www.bnbchain.org/)
 

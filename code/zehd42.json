@@ -1,0 +1,9 @@
+{
+  "name": "Zehd42",
+  "description": "Un NFT unique créé dans le cadre du projet Zehd42. L'œuvre représente la réponse... et bien sûr, le 42.",
+  "image": "https://gateway.pinata.cloud/ipfs/bafybeiejl5obawdmnf7ptq7xx7wuttc4ri274x4vbstwby3wbcb44eejcu",
+  "attributes": [
+    { "trait_type": "Artiste", "value": "alamizan" },
+    { "trait_type": "Projet", "value": "Zehd42" }
+  ]
+}
