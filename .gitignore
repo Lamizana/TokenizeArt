@@ -3,3 +3,6 @@
 
 # Clés privées / variables d'environnement
 .env
+
+# OpenCode / OpenChamber (etat local)
+.opencode/
