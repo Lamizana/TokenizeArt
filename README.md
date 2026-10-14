@@ -165,6 +165,8 @@ Le vocabulaire à connaître :
 - [Site](https://lamizana.github.io/ZehdBox/)
 - [GitHub](https://github.com/Lamizana/TokenizeArt)
 
+---
+
 <div align="center">
 
 *Ce projet a été réalisé conformément à la norme et au sujet officiel de 42.*
