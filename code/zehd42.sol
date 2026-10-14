@@ -28,7 +28,8 @@ contract Zehd42 is ERC721URIStorage, Ownable {
         return newTokenId;
     }
 
-    // Changer l'URI de base des prochains mints (réservé au propriétaire) :
+    // Changer l'URI de base des prochains mints (réservé au propriétaire)
+    // Fait évoluer l'emplacement des métadonnées sans changer l'adresse du contrat :
     function setBaseURI(string memory _newBaseURI) public onlyOwner {
         baseURI = _newBaseURI;
     }

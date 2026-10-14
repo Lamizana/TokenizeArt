@@ -1,0 +1,5 @@
+# VS Code
+.vscode/
+
+# Clés privées / variables d'environnement
+.env
