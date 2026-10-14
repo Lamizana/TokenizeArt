@@ -1,8 +1,8 @@
 <div align="center">
-    <h1>ZEHD42 (Z42)</h1>
-    <img src="../images/Zehd42.png" alt="NFT Zehd42" width="360" style="border-radius: 16px;">
+    <h1>Zehd42 (Z42)</h1>
+    <img src="../images/Zehd42.png" alt="NFT Zehd42" width="360">
     <p>
-        <em>Livre Blanc du NFT ZEHD42</em>.
+        <em>Livre Blanc du NFT Zehd42</em>.
     </p>
 </div>
 
@@ -10,7 +10,7 @@
 
 ## 1. Vision
 
-ZEHD42 est un **jeton non fongible (NFT)** conforme à la norme **BEP-721 / ERC-721**, déployé sur la **BNB Smart Chain (testnet)**.
+Zehd42 est un **jeton non fongible (NFT)** conforme à la norme **BEP-721 / ERC-721**, déployé sur la **BNB Smart Chain (testnet)**.
 
 Il représente une œuvre unique portant le chiffre **42**: *"la réponse à la grande question sur la vie, l'univers et le reste..."* dans le cadre du partenariat pédagogique **42 × BNB Chain**.
 
@@ -27,13 +27,13 @@ Il illustre le cycle de vie complet d'un NFT :
 
 | Propriété | Valeur |
 | --- | --- |
-| ***Nom*** | ZEHD42 |
+| ***Nom*** | Zehd42 |
 | ***Symbole*** | Z42 |
 | ***Norme*** | BEP-721 (compatible ERC-721) |
 | ***Réseau*** | BNB Smart Chain Testnet (Chain ID 97) |
 | ***Offre*** | 1 exemplaire unique (tokenId 1). collection extensible par le propriétaire |
 | ***Mint*** | Réservé au propriétaire (`onlyOwner`) |
-| ***Métadonnées*** | IPFS (épinglées via Pinata) |
+| ***Métadonnées*** | IPFS (épinglées via Pinata — voir [`IPFS.md`](./IPFS.md)) |
 | ***Contrat*** | [`0x3fcCab7bb70aa5BCA5706B83e6Fcf08F80526ce9`](https://testnet.bscscan.com/address/0x3fcCab7bb70aa5BCA5706B83e6Fcf08F80526ce9) |
 | ***Vérification*** | Oui — code source public sur BscScan |
 | ***ABI*** | [`abi.json`](../deployment/abi.json) — interface d'interaction avec le contrat (voir `deployment/`) |
@@ -61,7 +61,7 @@ Le contrat hérite d'`ERC721URIStorage` et d'`Ownable` (OpenZeppelin v5.1.0), qu
 - `tokenURI(tokenId)` : URI des métadonnées du token.
 - `owner()` / `transferOwnership(newOwner)` / `renounceOwnership()` : propriété du contrat.
 
-### Fonctions spécifiques à ZEHD42
+### Fonctions spécifiques à Zehd42
 
 | Fonction | Description |
 | --- | --- |
@@ -122,7 +122,7 @@ function setBaseURI(string memory _newBaseURI) public onlyOwner {
 
 - **Œuvre numérique unique** : certificat de propriété d'une création portant le 42.
 - **Support de démonstration** : évaluations, tutoriels, présentations Web3.
-- **Base de collection** : le contrat peut accueillir une collection ZEHD42.
+- **Base de collection** : le contrat peut accueillir une collection Zehd42.
 
 ---
 
@@ -144,3 +144,5 @@ function setBaseURI(string memory _newBaseURI) public onlyOwner {
 4. (Optionnel) Importer le NFT dans MetaMask (BSC Testnet) avec l'adresse du contrat et le `tokenId` 1.
 
 > Pour l'ABI et les informations de déploiement, voir [`deployment/README.md`](../deployment/README.md).
+>
+> Pour le stockage distribué (IPFS & Pinata), voir [`IPFS.md`](./IPFS.md) ; pour la procédure pas à pas complète, voir le [tutoriel](TokenizeArt-Tutoriel.html).

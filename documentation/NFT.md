@@ -1,7 +1,6 @@
-
 <div align="center">
     <h1>NFT</h1>
-    <img src="../images/logo_nft.jpeg" alt="Icone NFT Glass" width="180" style="border-radius: 16px;">
+    <img src="../images/logo_nft.jpeg" alt="Icone NFT Glass" width="180">
     <p>
         <em>Un NFT est un <strong>certificat numérique d'authenticité</strong> et de propriété associé à un objet virtuel ou réel, enregistré sur une <strong>blockchain</strong>.
     </p>
@@ -72,7 +71,7 @@ En plus de celles-ci, il possède également d'autres fonctionnalités comme app
 
 Les droits ne sont pas forcément, et pas généralement, des droits de propriété sur l'objet associé. On est propriétaire du NFT, mais pas forcément de l'objet associé au NFT.
 
-> [!INFO]
+> [!NOTE]
 > Il importe donc de savoir comment est réalisé ce lien et quels sont les droits que donne le fait de posséder un NFT sur lui.
 
 Pour les protocoles NFT les plus connus, il existe des licences générales qui établissent les droits que donne la détention d'un NFT.

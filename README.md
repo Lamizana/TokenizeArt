@@ -9,7 +9,7 @@
 </div>
 <div align="center">
     <h1>TokenizeArt</h1>
-    <img src="./images/Zehd42.png" alt="NFT Zehd42" width="360" style="border-radius: 16px;">
+    <img src="./images/Zehd42.png" alt="NFT Zehd42" width="360">
     <p>
         <strong>NFT ERC-721 créé sur la BNB Smart Chain</strong>
     </p>
@@ -118,11 +118,10 @@ C'est l'outil le plus direct pour un projet de cette taille, et il est recommand
 
 - `code/`: contrat Solidity `Zehd42` (`zehd42.sol`) et métadonnées du NFT (`zehd42.json`)
 - `deployment/`: adresse du contrat, réseau et ABI (`abi.json`)
-- `documentation/`: sujet, tutoriel, guides IPFS/Pinata
+- `documentation/`: sujet, livre blanc, tutoriel, guides IPFS & Pinata
 - `mint/`: instructions pour miner le NFT (`README.md`)
 - `images/`: stockage des images et logos
   - `Zehd42.png` : image de l'œuvre (épinglée sur IPFS)
-  - `Zehd42_02.jpeg` : version alternative, réservée à un test de déploiement lors de l'évaluation
   - `logo_nft.jpeg` : logo du projet
   - `logo_blockchain.jpeg` : logo blockchain
   - `logo_pinata.jpeg` : logo Pinata
@@ -149,11 +148,12 @@ Le vocabulaire à connaître :
 
 ## Documentation
 
+- ***Livre blanc*** : [`documentation/ZEHD42.md`](documentation/ZEHD42.md)
 - ***Sujet officiel*** : [`documentation/SUJET.md`](documentation/SUJET.md)
+- ***Tutoriel pas à pas*** : [`documentation/TokenizeArt-Tutoriel.html`](documentation/TokenizeArt-Tutoriel.html)
 - ***Rappels blockchain*** : [`documentation/BLOCKCHAIN.md`](documentation/BLOCKCHAIN.md)
 - ***Les NFT et la norme ERC-721*** : [`documentation/NFT.md`](documentation/NFT.md)
-- ***Stockage distribué*** : [`documentation/IPFS.md`](documentation/IPFS.md)
-- ***Epinglage IPFS*** : [`documentation/PINATA.md`](documentation/PINATA.md)
+- ***Stockage distribué (IPFS & Pinata)*** : [`documentation/IPFS.md`](documentation/IPFS.md)
 - ***Explorateur BscScan*** : [`documentation/BSCSCAN.md`](documentation/BSCSCAN.md)
 
 ---

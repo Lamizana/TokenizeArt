@@ -269,7 +269,7 @@
         <li><b>Adresse</b> : une longue chaîne (<code>0x...</code>) qui identifie un compte, un peu comme un numéro de compte bancaire.</li>
         <li><b>Smart contract</b> : un programme qui vit sur la blockchain (ici : la fabrique qui crée tes NFTs).</li>
         <li><b>IPFS</b> : un système de stockage distribué de fichiers, idéal pour héberger l'image et les métadonnées d'un NFT de façon permanente.</li>
-        <li><b>CID</b> : l'empreinte unique d'un fichier sur IPFS (<code>ipfs://Qm...</code>). Il sert à retrouver l'image n'importe où.</li>
+        <li><b>CID</b> : l'empreinte unique d'un fichier sur IPFS (ex. <code>bafybei...</code> ou <code>Qm...</code>). Il sert à retrouver l'image n'importe où.</li>
         <li><b>Métadonnées</b> : le "dossier" du NFT (image, nom, artiste, titre...) stocké en JSON, souvent sur IPFS.</li>
         <li><b>Gas</b> : la petite redevance en crypto payée pour exécuter une action sur la blockchain.</li>
         <li><b>Faucet</b> : un site qui distribue gratuitement des jetons de test.</li>
@@ -278,7 +278,7 @@
       </ul>
     </div>
 
-    <div class="box info"><b>Notre objectif :</b> créer un NFT nommé <code>Token42</code>, avec une image stockée sur <b>IPFS</b> (le chiffre <b>42</b> doit y être lisible), le déployer sur la <b>BSC Testnet</b>, le miner, puis le vérifier sur <b>BSCScan</b>.</div>
+    <div class="box info"><b>Notre objectif :</b> créer un NFT nommé <code>Zehd42</code>, avec une image stockée sur <b>IPFS</b> (le chiffre <b>42</b> doit y être lisible), le déployer sur la <b>BSC Testnet</b>, le miner, puis le vérifier sur <b>BSCScan</b>.</div>
   </section>
 
   <!-- ============ B. METAMASK ============ -->
@@ -489,9 +489,9 @@
       <h3><span class="k">E.1</span> Rédiger le fichier metadata.json</h3>
       <p>Crée un fichier <code>metadata.json</code> de ce type (adapte les valeurs) :</p>
       <pre><code>{
-  "name": "Token42 — Méditation au 42e étage",
+  "name": "Zehd42 — Méditation au 42e étage",
   "description": "Un NFT unique créé dans le cadre du projet TokenizeArt (42 x BNB Chain). L'œuvre représente la réponse... et bien sûr, le 42.",
-  "image": "ipfs://QmXy1...VOTRE_CID_IMAGE...",
+  "image": "https://gateway.pinata.cloud/ipfs/VOTRE_CID_IMAGE",
   "attributes": [
     { "trait_type": "Artiste", "value": "alamizan" },
     { "trait_type": "Projet", "value": "TokenizeArt" }
@@ -499,7 +499,7 @@
 }</code></pre>
       <ul>
         <li><b><code>name</code></b> : le titre du NFT, contenant le chiffre <b>42</b>.</li>
-        <li><b><code>image</code></b> : le CID IPFS de l'image obtenu en D.2 (préfixe <code>ipfs://</code>).</li>
+        <li><b><code>image</code></b> : l'<b>URL HTTPS de passerelle</b> vers le CID de l'image obtenu en D.2 (ex. <code>https://gateway.pinata.cloud/ipfs/&lt;CID&gt;</code>). Le format <code>ipfs://</code> est aussi valide, mais moins bien résolu par les wallets.</li>
         <li><b><code>attributes / Artiste</code></b> : ton identifiant (ex. ton login 42). Le sujet veut que le nom de l'artiste corresponde à ton identifiant.</li>
       </ul>
       <div class="box warn"><b>Attention :</b> chaque champ doit être écrit en bon JSON (virgules, guillemets). Une erreur de syntaxe et le NFT s'affichera vide.</div>
@@ -523,69 +523,61 @@
     <h2><span class="step-num">F</span> Écrire le smart contract du NFT</h2>
     <p class="intro">On écrit le programme de notre NFT en <b>Solidity</b>. On réutilise la bibliothèque <b>OpenZeppelin</b> qui fournit un ERC-721 éprouvé (pas besoin de tout réinventer, c'est plus sûr).</p>
 
-    <div class="goal"><b>Objectif :</b> un fichier <code>Token42.sol</code> correct, commenté, avec les fonctions <code>mint</code>, <code>ownerOf</code> et une gestion de propriété sécurisée.</div>
+    <div class="goal"><b>Objectif :</b> un fichier <code>zehd42.sol</code> correct, commenté, avec les fonctions <code>mintNFT</code> et <code>setBaseURI</code>, la propriété (<code>ownerOf</code> héritée) et une gestion sécurisée par <code>Ownable</code>.</div>
 
     <div class="step">
       <h3><span class="k">F.1</span> Le code complet du contrat</h3>
-      <p>Ce fichier doit aller dans le dossier <code>code/</code> de ton dépôt sous le nom <code>Token42.sol</code>. Voici un exemple de base (à adapter et à <b>commenter toi-même</b> pour l'évaluation) :</p>
+      <p>Ce fichier doit aller dans le dossier <code>code/</code> de ton dépôt sous le nom <code>zehd42.sol</code>. Voici un exemple de base (à adapter et à <b>commenter toi-même</b> pour l'évaluation) :</p>
       <pre><code>// SPDX-License-Identifier: MIT
-// Token42 — NFT non fongible (standard BEP-721 / ERC-721) sur la BNB Chain
-pragma solidity ^0.8.0;
+// Zehd42 — NFT non fongible (BEP-721 / ERC-721) sur la BNB Smart Chain
+pragma solidity ^0.8.20;
 
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
-import "@openzeppelin/contracts/utils/Counters.sol";
+// Imports OpenZeppelin v5.1.0 : ERC721 (standard), ERC721URIStorage (URI), Ownable (propriété)
+import "https://raw.githubusercontent.com/OpenZeppelin/openzeppelin-contracts/v5.1.0/contracts/token/ERC721/ERC721.sol";
+import "https://raw.githubusercontent.com/OpenZeppelin/openzeppelin-contracts/v5.1.0/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "https://raw.githubusercontent.com/OpenZeppelin/openzeppelin-contracts/v5.1.0/contracts/access/Ownable.sol";
 
-contract Token42 is ERC721URIStorage {
-    using Counters for Counters.Counter;
-    Counters.Counter private _tokenIds;
+contract Zehd42 is ERC721URIStorage, Ownable {
+    // Compteur des tokens créés (ids à partir de 1) :
+    uint256 private _tokenIds;
 
-    address public owner;
+    // URI de base des métadonnées (IPFS) :
     string public baseURI;
 
-    // Chaque NFT possède un numéro unique (tokenId)
-    // et une URI pointant vers ses métadonnées (IPFS)
-
-    constructor(string memory _baseURI) ERC721("Token42", "T42") {
-        owner = msg.sender;   // Le déployeur devient propriétaire de la collection
+    // Constructeur : nom, symbole et URI de base :
+    constructor(string memory _baseURI) ERC721("Zehd42", "Z42") Ownable(msg.sender) {
         baseURI = _baseURI;
     }
 
-    // Créer (miner) un nouveau NFT pour `recipient`
-    function mintNFT(address recipient) public returns (uint256) {
-        require(msg.sender == owner, "Token42: only owner can mint");
-        _tokenIds.increment();
-        uint256 newTokenId = _tokenIds.current();
-        _mint(recipient, newTokenId);
-        _setTokenURI(newTokenId, baseURI);  // pointe vers metadata.json sur IPFS
+    // Miner un NFT, réservé au propriétaire :
+    function mintNFT(address recipient) public onlyOwner returns (uint256) {
+        _tokenIds += 1;                    // nouvel id
+        uint256 newTokenId = _tokenIds;
+        _safeMint(recipient, newTokenId);  // vérifie que le destinataire accepte le NFT
+        _setTokenURI(newTokenId, baseURI); // associe les métadonnées IPFS
         return newTokenId;
     }
 
-    // Récupérer le propriétaire d'un NFT donné (exigé par le sujet)
-    function ownerOf(uint256 tokenId) public view override returns (address) {
-        return super.ownerOf(tokenId);
-    }
-
-    // Transférer la propriété de la collection
-    function transferOwnership(address newOwner) public {
-        require(msg.sender == owner, "Token42: only owner");
-        owner = newOwner;
+    // Changer l'URI de base des prochains mints (réservé au propriétaire)
+    // Fait évoluer l'emplacement des métadonnées sans changer l'adresse du contrat :
+    function setBaseURI(string memory _newBaseURI) public onlyOwner {
+        baseURI = _newBaseURI;
     }
 }
 </code></pre>
-      <div class="box warn"><b>À toi de jouer :</b> ce code est une base. Commente chaque fonction avec tes propres mots — une <b>revue de code</b> aura lieu à l'évaluation. Vérifie notamment que <code>ownerOf</code> est bien présent (exigence du sujet).</div>
+      <div class="box warn"><b>À toi de jouer :</b> ce code est une base. Commente chaque fonction avec tes propres mots — une <b>revue de code</b> aura lieu à l'évaluation. Vérifie notamment que <code>ownerOf</code> et <code>tokenURI</code> répondent bien (exigences du sujet).</div>
     </div>
 
     <div class="step">
       <h3><span class="k">F.2</span> Expliquer les mots du code</h3>
       <ul>
-        <li><code>contract Token42 is ERC721URIStorage</code> → on hérite du standard NFT d'OpenZeppelin + du support des URI stockées.</li>
-        <li><code>_tokenIds</code> → un compteur qui attribue un numéro unique à chaque NFT (1, 2, 3…).</li>
-        <li><code>mintNFT</code> → crée réellement le NFT et lui associe ses métadonnées (l'URI IPFS).</li>
-        <li><code>ownerOf</code> → répond « qui possède ce NFT ? » (fonction exigée par le sujet).</li>
-        <li><code>require(...)</code> → vérifie une condition, sinon annule la transaction. Ici : seul le propriétaire peut miner.</li>
+        <li><code>contract Zehd42 is ERC721URIStorage, Ownable</code> → on hérite du standard NFT d'OpenZeppelin, du support des URI stockées et de la gestion de propriété (<code>Ownable</code>).</li>
+        <li><code>_tokenIds</code> → un compteur (<code>uint256</code>) qui attribue un numéro unique à chaque NFT (les ids démarrent à 1).</li>
+        <li><code>mintNFT</code> → crée réellement le NFT et lui associe ses métadonnées (l'URI IPFS). Réservé au propriétaire.</li>
+        <li><code>ownerOf</code> → répond « qui possède ce NFT ? » (héritée d'ERC-721, exigée par le sujet).</li>
+        <li><code>onlyOwner</code> → modificateur d'OpenZeppelin : seul le propriétaire peut miner (<code>mintNFT</code>) ou changer l'URI (<code>setBaseURI</code>).</li>
       </ul>
-      <div class="box info"><b>Pourquoi un seul owner ?</b> Le sujet parle de sécurité (propriété / privilèges). On restreint le <code>mint</code> au propriétaire pour contrôler qui crée les NFTs. C'est un choix sûr et simple à défendre à l'oral.</div>
+      <div class="box info"><b>Pourquoi restreindre le mint ?</b> Le sujet parle de sécurité (propriété / privilèges). On restreint <code>mintNFT</code> au propriétaire via <code>onlyOwner</code> pour contrôler qui crée les NFTs. C'est un choix sûr et simple à défendre à l'oral.</div>
     </div>
   </section>
 
@@ -600,17 +592,17 @@ contract Token42 is ERC721URIStorage {
       <h3><span class="k">G.1</span> Ouvrir Remix et créer le fichier</h3>
       <ol>
         <li>Va sur <code>https://remix.ethereum.org</code>.</li>
-        <li>Dans le panneau de gauche (explorateur de fichiers), crée un dossier <b>contracts</b> s'il n'existe pas, puis un fichier <code>Token42.sol</code> (icône "nouveau fichier").</li>
+        <li>Dans le panneau de gauche (explorateur de fichiers), crée un dossier <b>code</b> s'il n'existe pas, puis un fichier <code>zehd42.sol</code> (icône "nouveau fichier") — comme dans le dépôt.</li>
         <li>Colle le code du contrat dedans et enregistre (<code>Ctrl+S</code>).</li>
       </ol>
     </div>
 
     <div class="step">
       <h3><span class="k">G.2</span> Installer OpenZeppelin (import)</h3>
-      <p>Le code importe <code>@openzeppelin/contracts/...</code>. Remix doit le télécharger :</p>
+      <p>Le code importe OpenZeppelin via des <b>URL GitHub</b> (version 5.1.0) ; Remix les télécharge automatiquement à la compilation :</p>
       <ol>
         <li>Ouvre l'onglet <b>"Solidity Compiler"</b> (icône en forme de "S").</li>
-        <li>Clique sur <b>"Compile Token42.sol"</b>. Remix détectera l'import manquant et proposera de l'installer — accepte.</li>
+        <li>Clique sur <b>"Compile zehd42.sol"</b>. Remix détectera l'import manquant et proposera de l'installer — accepte.</li>
         <li>Sinon, va dans l'onglet <b>"File explorer"</b> → clic droit sur le dossier racine → <b>"Import from GitHub"</b> et colle : <code>OpenZeppelin/openzeppelin-contracts@master/contracts/token/ERC721/ERC721.sol</code>. Remix récupérera toute la bibliothèque.</li>
       </ol>
     </div>
@@ -618,8 +610,8 @@ contract Token42 is ERC721URIStorage {
     <div class="step">
       <h3><span class="k">G.3</span> Choisir la version et compiler</h3>
       <ol>
-        <li>Dans "Solidity Compiler", choisis la version <b>0.8.x</b> (ex. 0.8.26) — elle doit correspondre à <code>pragma solidity ^0.8.0</code>.</li>
-        <li>Clique sur <b>"Compile Token42.sol"</b>.</li>
+        <li>Dans "Solidity Compiler", choisis la version <b>0.8.x</b> (ex. 0.8.26) — elle doit satisfaire le <code>pragma solidity ^0.8.20</code> du contrat.</li>
+        <li>Clique sur <b>"Compile zehd42.sol"</b>.</li>
         <li>La barre verte <b>"Compilation successful"</b> doit s'afficher.</li>
       </ol>
       <div class="box warn"><b>Erreurs fréquentes :</b></div>
@@ -652,8 +644,8 @@ contract Token42 is ERC721URIStorage {
     <div class="step">
       <h3><span class="k">H.2</span> Fournir le baseURI et lancer le déploiement</h3>
       <ol>
-        <li>Le constructeur du contrat demande un <b><code>_baseURI</code></b>. Renseigne le CID JSON obtenu en E.2 avec le préfixe <code>ipfs://</code> : par ex. <code>ipfs://QmAbc...</code>.</li>
-        <li>Dans le panneau "Deploy &amp; Run", le contrat <b>Token42</b> doit être sélectionné (en haut).</li>
+        <li>Le constructeur du contrat demande un <b><code>_baseURI</code></b>. Renseigne l'<b>URL HTTPS de passerelle</b> vers le CID JSON obtenu en E.2 : par ex. <code>https://gateway.pinata.cloud/ipfs/&lt;CID_JSON&gt;</code> (évite <code>ipfs://</code>, non résolu par MetaMask sur BSC Testnet).</li>
+        <li>Dans le panneau "Deploy &amp; Run", le contrat <b>Zehd42</b> doit être sélectionné (en haut).</li>
         <li>Clique sur <b>"Deploy"</b>.</li>
         <li>Une fenêtre MetaMask apparaît : vérifie le "gas" estimé et clique <b>"Confirmer"</b>.</li>
         <li>Attends que la transaction soit incluse dans un bloc (généralement quelques secondes).</li>
@@ -681,11 +673,11 @@ contract Token42 is ERC721URIStorage {
     <div class="step">
       <h3><span class="k">I.1</span> Appeler mintNFT</h3>
       <ol>
-        <li>Toujours dans Remix, section "Deployed Contracts" → ton contrat <b>Token42</b> déployé.</li>
+        <li>Toujours dans Remix, section "Deployed Contracts" → ton contrat <b>Zehd42</b> déployé.</li>
         <li>Déplie la liste des fonctions et trouve <code>mintNFT</code>.</li>
         <li>Renseigne l'<b>adresse du destinataire</b> (choisis ton adresse MetaMask pour être le premier propriétaire).</li>
         <li>Clique sur le bouton <b><code>transact</code></b>, confirme dans MetaMask.</li>
-        <li>La fonction retourne un <b>tokenId</b> (généralement <code>0</code> ou <code>1</code>) : c'est le numéro unique de ton NFT.</li>
+        <li>La fonction retourne un <b>tokenId</b> (<code>1</code> avec ce contrat, car les ids démarrent à 1) : c'est le numéro unique de ton NFT.</li>
       </ol>
       <div class="box good"><b>Vérif :</b> le NFT existe désormais ! Son image et ses métadonnées sont lisibles via l'URI IPFS.</div>
     </div>
@@ -705,7 +697,7 @@ contract Token42 is ERC721URIStorage {
       <ol>
         <li>Bascule sur ta <b>deuxième adresse</b> dans MetaMask (B.3).</li>
         <li>Appelle <code>mintNFT</code> depuis ce compte non-propriétaire.</li>
-        <li>La transaction doit <b>échouer</b> avec le message <code>Token42: only owner can mint</code>.</li>
+        <li>La transaction doit <b>échouer</b> avec l'erreur <code>OwnableUnauthorizedAccount</code> (émise par le modificateur <code>onlyOwner</code>).</li>
       </ol>
       <div class="box good"><b>À l'évaluation :</b> montre ces appels dans Remix ou sur BSCScan — les transactions y sont visibles et vérifiables.</div>
     </div>
@@ -738,10 +730,11 @@ contract Token42 is ERC721URIStorage {
             <li>Open Source License Type : <code>MIT License</code></li>
           </ul>
         </li>
-        <li>Colle le code complet de <code>Token42.sol</code> dans le champ "Solidity Contract Code".</li>
+        <li>Colle le code complet de <code>zehd42.sol</code> dans le champ "Solidity Contract Code".</li>
         <li>Clique <b>"Verify and Publish"</b>.</li>
       </ol>
       <div class="box warn"><b>Si la vérification échoue :</b> c'est presque toujours un paramètre différent de la compilation (version Solidity, licence, ou le code pas exactement identique). Recopie ton code depuis Remix tel quel.</div>
+      <div class="box info"><b>Imports via URL GitHub :</b> ce contrat importe OpenZeppelin par URL. Pour BSCScan, privilégie le plugin <b>"Contract verification"</b> de Remix (qui gère les imports) ou l'option <b>"Solidity (Standard-Json-Input)"</b> plutôt que "Single file".</div>
     </div>
 
     <div class="step">
@@ -765,10 +758,10 @@ contract Token42 is ERC721URIStorage {
     <div class="step">
       <h3><span class="k">K.1</span> Organiser les dossiers demandés</h3>
       <ul>
-        <li><b><code>code/</code></b> : ton smart contract <code>Token42.sol</code> (le code utilisé pour créer le NFT).</li>
+        <li><b><code>code/</code></b> : ton smart contract <code>zehd42.sol</code> (le code utilisé pour créer le NFT).</li>
         <li><b><code>deployment/</code></b> : tout ce qui sert au déploiement — l'<b>ABI</b> (dans Remix, onglet "Solidity Compiler" → bouton <b>"ABI"</b> → exporte le JSON), l'adresse du contrat, le réseau.</li>
         <li><b><code>mint/</code></b> : les fichiers/instructions pour miner le NFT (script d'appel ou note expliquant la fonction <code>mintNFT</code>).</li>
-        <li><b><code>documentation/</code></b> : le sujet, un whitelivre/manuel et tes notes.</li>
+        <li><b><code>documentation/</code></b> : le sujet, un livre blanc/manuel et tes notes.</li>
       </ul>
     </div>
 
@@ -787,7 +780,7 @@ contract Token42 is ERC721URIStorage {
       <h3><span class="k">K.3</span> Rédiger le <code>README.md</code> racine</h3>
       <p>Le sujet exige d'expliquer les choix faits. Structure suggérée :</p>
       <ul>
-        <li>Présentation du projet et du NFT (<code>Token42</code> / <code>T42</code>).</li>
+        <li>Présentation du projet et du NFT (<code>Zehd42</code> / <code>Z42</code>).</li>
         <li>Choix de la plateforme : BNB Chain (BEP-721) + pourquoi (partenaire du sujet, faible coût, faucet gratuit).</li>
         <li>Choix de l'outil : Remix (simple, recommandé par le sujet).</li>
         <li>Choix techniques : OpenZeppelin ERC-721, image et métadonnées sur IPFS, sécurité via <code>onlyOwner</code>.</li>
@@ -799,7 +792,7 @@ contract Token42 is ERC721URIStorage {
     <div class="step">
       <h3><span class="k">K.4</span> Finaliser la documentation</h3>
       <ul>
-        <li>Rédige un <b>whitelivre</b> décrivant ce que représente ton NFT et comment il fonctionne.</li>
+        <li>Rédige un <b>livre blanc</b> décrivant ce que représente ton NFT et comment il fonctionne.</li>
         <li>Assure-toi qu'il est possible de comprendre le fonctionnement et les prérequis pour utiliser ton NFT (fonction <code>ownerOf</code>, lecture des métadonnées).</li>
         <li>Optionnel mais valorisé : une <b>vidéo de démo</b> (un simple lien suffit — la vidéo n'apporte pas de meilleure note, elle est facultative).</li>
       </ul>
@@ -834,17 +827,17 @@ contract Token42 is ERC721URIStorage {
 
     <div class="step">
       <h3><span class="k">L.3</span> Mon image / mon JSON ne s'affiche pas</h3>
-      <p>→ Vérifie le CID IPFS : le préfixe <code>ipfs://</code> est-il bien présent dans le <code>baseURI</code> du contrat ? Le fichier est-il encore "épinglé" sur Pinata ? Teste le lien via la passerelle IPFS.</p>
+      <p>→ Vérifie le <code>baseURI</code> : utilise une <b>URL HTTPS de passerelle</b> (<code>https://gateway.pinata.cloud/ipfs/&lt;CID&gt;</code>) plutôt que <code>ipfs://</code>, non résolu par MetaMask sur BSC Testnet. Le fichier est-il encore « épinglé » sur Pinata ? Teste le lien.</p>
     </div>
 
     <div class="step">
       <h3><span class="k">L.4</span> La vérification BSCScan échoue</h3>
-      <p>→ Compare paramètre par paramètre avec Remix : version Solidity identique, licence MIT, et colle le code <b>exact</b> de <code>Token42.sol</code> (mêmes espaces, mêmes commentaires, c'est un hash qui doit matcher).</p>
+      <p>→ Compare paramètre par paramètre avec Remix : version Solidity identique, licence MIT, et colle le code <b>exact</b> de <code>zehd42.sol</code> (mêmes espaces, mêmes commentaires, c'est un hash qui doit matcher).</p>
     </div>
 
     <div class="step">
       <h3><span class="k">L.5</span> "revert" quand j'appelle mintNFT depuis un autre compte</h3>
-      <p>Normal ! <code>mintNFT</code> est protégé par la vérification du propriétaire. C'est le comportement attendu et c'est exactement ce qu'il faut montrer à l'évaluation.</p>
+      <p>Normal ! <code>mintNFT</code> est protégé par le modificateur <code>onlyOwner</code> (erreur <code>OwnableUnauthorizedAccount</code>). C'est le comportement attendu et c'est exactement ce qu'il faut montrer à l'évaluation.</p>
     </div>
 
     <div class="step">
@@ -892,9 +885,9 @@ const nft = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
 async function mint() {
   const tx = await nft.mintNFT(account);   // seul le propriétaire peut mint
   await tx.wait();
-  console.log("NFT miné ! tokenId :", tx.hash);
+  console.log("NFT miné ! tx :", tx.hash);
 }</code></pre>
-      <div class="box warn"><b>Sécurité :</b> le bouton de mint fonctionne uniquement depuis le compte <b>propriétaire</b> (le <code>require</code> du contrat). D'autres visiteurs pourront <b>voir</b> la collection, mais pas miner.</div>
+      <div class="box warn"><b>Sécurité :</b> le bouton de mint fonctionne uniquement depuis le compte <b>propriétaire</b> (modificateur <code>onlyOwner</code> du contrat). D'autres visiteurs pourront <b>voir</b> la collection, mais pas miner.</div>
     </div>
 
     <div class="step">
@@ -903,9 +896,8 @@ async function mint() {
       <ol>
         <li>Encode <code>metadata.json</code> en base64 (ex. via un site/outil <code>base64</code> en ligne).</li>
         <li>Préfixe le résultat avec <code>data:application/json;base64,</code>.</li>
-        <li>Dans le contrat, ajoute une fonction permettant de mettre à jour le URI d'un token passé :
-          <pre><code>function setTokenURI(uint256 tokenId, string memory uri) public {
-    require(msg.sender == owner, "Token42: only owner");
+        <li>Dans le contrat, ajoute une fonction permettant de mettre à jour l'URI d'un token déjà miné :
+          <pre><code>function setTokenURI(uint256 tokenId, string memory uri) public onlyOwner {
     _setTokenURI(tokenId, uri);
 }</code></pre>
         </li>

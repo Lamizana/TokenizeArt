@@ -1,4 +1,4 @@
-# Deploiement NFT Zehd42 (TokenizeArt / Z42)
+# Déploiement NFT Zehd42 (TokenizeArt / Z42)
 
 Réseau : **BNB Smart Chain Testnet** (chainId `97`)
 
@@ -14,16 +14,16 @@ compiler, déployer et tester des smart-contracts compatibles EVM (dont la BNB S
 Le contrat `code/zehd42.sol` a été compilé avec Solidity `^0.8.20`, puis déployé via
 l'environnement **« Injected Provider - MetaMask »** connecté à la **BSC Testnet**.
 
-## Adresse du contrat (deploiement valide)
+## Adresse du contrat (déploiement valide)
 
 - Adresse du contrat : `0x3fcCab7bb70aa5BCA5706B83e6Fcf08F80526ce9`
-- Emetteur (deployeur / owner) : `0x69eF124b2033A69C6061cf88FfFBAE913E169fB2`
-- `baseURI` (metadonnees IPFS) : `https://gateway.pinata.cloud/ipfs/bafkreibd2pph7dcwz7ewgtr73x3iwxmibux4bsb5ebqtg242n2numeb4pe`
+- Émetteur (déployeur / owner) : `0x69eF124b2033A69C6061cf88FfFBAE913E169fB2`
+- `baseURI` (métadonnées IPFS) : `https://gateway.pinata.cloud/ipfs/bafkreibd2pph7dcwz7ewgtr73x3iwxmibux4bsb5ebqtg242n2numeb4pe`
 - CID image (IPFS) : `bafybeiejl5obawdmnf7ptq7xx7wuttc4ri274x4vbstwby3wbcb44eejcu`
 - `ownerOf(1)` : `0x69eF124b2033A69C6061cf88FfFBAE913E169fB2`
 - Vérifié sur BscScan : **Oui** (code source public)
 
-## Transaction de deploiement
+## Transaction de déploiement
 
 - Hash : `0x717d3eaf6b7001b2dee9e4cc29d15b94fb7023ce89e42379c3c475ddb5663232`
 - Bloc : `133876136` (statut succès)
@@ -47,15 +47,15 @@ l'environnement **« Injected Provider - MetaMask »** connecté à la **BSC Tes
 
 ## Historique
 
-Plusieurs deploiements ont ete faits sur le testnet avant le deploiement valide :
+Plusieurs déploiements ont été faits sur le testnet avant le déploiement valide :
 
-1. `0xb6e002d16F930810038BCD9597e7aA56Ea729262` : `baseURI` **errone** (CID de
+1. `0xb6e002d16F930810038BCD9597e7aA56Ea729262` : `baseURI` **erroné** (CID de
    l'image au lieu du CID du JSON) -> `tokenURI` renvoyait un JPEG a la place des
-   metadonnees (NFT illisible). **Obsolete.**
+   métadonnées (NFT illisible). **Obsolète.**
 2. `0x3f284695a4DF478e4fF839ce396b8c2Cff2d97c9` : `baseURI` en `ipfs://` -> non
-   resolu par MetaMask sur BSC Testnet, image absente. **Obsolete.**
+   résolu par MetaMask sur BSC Testnet, image absente. **Obsolète.**
 3. `0x3fcCab7bb70aa5BCA5706B83e6Fcf08F80526ce9` : `baseURI` en **HTTPS** de
-   passerelle -> **deploiement valide** (voir ci-dessus).
+   passerelle -> **déploiement valide** (voir ci-dessus).
 
 ## Procédure de test post-déploiement
 
@@ -77,7 +77,7 @@ Vérifications effectuées via l'onglet **Read Contract** de [BscScan](https://t
 
 ## Note
 
-Le contrat comporte `setBaseURI` (onlyOwner) pour corriger les metadonnees des
+Le contrat comporte `setBaseURI` (onlyOwner) pour corriger les métadonnées des
 prochains mints sans redeployer.
 
 ## Qu'est-ce que l'ABI ?

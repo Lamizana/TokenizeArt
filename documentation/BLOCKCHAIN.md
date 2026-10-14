@@ -1,6 +1,6 @@
 <div align="center">
     <h1>Blockchain</h1>
-    <img src="../images/logo_blockchain.jpeg" alt="Logo Blockchain" width="360" style="border-radius: 16px;">
+    <img src="../images/logo_blockchain.jpeg" alt="Logo Blockchain" width="360">
     <p>
         <em>la blockchain est une technologie qui permet le stockage et la transmission d'information de manière transparente, <strong>décentralisée et sans tiers de confiance</strong>.</em>
     </p>
@@ -12,7 +12,7 @@
 
 La blockchain représente une **séquence de blocs reliés les uns aux autres** dans laquelle chaque bloc correspond à un ensemble de transactions. Elle se définit comme une **base de données stockée sur un réseau décentralisé**.
 
-> [!info]
+> [!NOTE]
 > Cette base de donnée est immuable, c'est à dire qu'il est seulement possible de consulter et d'ajouter des informations sur cette dernière.
 
 Contrairement aux systèmes banquaire traditionnels, **la blockchain se veut décentralisée**. Au lieu d'avoir une banque qui contrôle et valide les transactions, ce rôle est reparti sur un **réseau d'ordinateurs, appelé validateur ou noeuds**. Chaque fois qu'une transaction est effectuée, elle doit être approuvée par ces ordinateurs selon des règles préétablies, ce qui assure la sécurité et l'intégrité des données.

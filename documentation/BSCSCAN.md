@@ -63,11 +63,11 @@ permet au propriétaire du projet de publier le ticker, le site web et le logo d
 
 ## Application au projet TokenizeArt
 
-C'est via BscScan Testnet que le NFT **ZEHD42 (Z42)** est consultable publiquement :
+C'est via BscScan Testnet que le NFT **Zehd42 (Z42)** est consultable publiquement :
 
 | Élément | Lien |
 | --- | --- |
-| Contrat ZEHD42 | [0x3fcCab7bb70aa5BCA5706B83e6Fcf08F80526ce9](https://testnet.bscscan.com/address/0x3fcCab7bb70aa5BCA5706B83e6Fcf08F80526ce9) |
+| Contrat Zehd42 | [0x3fcCab7bb70aa5BCA5706B83e6Fcf08F80526ce9](https://testnet.bscscan.com/address/0x3fcCab7bb70aa5BCA5706B83e6Fcf08F80526ce9) |
 | Statut | Vérifié ✅ (code source public) |
 
 On y retrouve notamment les événements émis par le contrat :
